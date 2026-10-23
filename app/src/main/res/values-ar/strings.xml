@@ -17,8 +17,8 @@
     <string name="asr">العصر</string>
     <string name="maghrib">المغرب</string>
     <string name="isha">العشاء</string>
-    <string name="method_uaq">أم القرى (الفجر 18.5°، العشاء بعد المغرب بـ90 دقيقة و120 في رمضان)</string>
-    <string name="method_qatar">تقويم قطر (الفجر 18°، العشاء بعد المغرب بـ90 دقيقة)</string>
+    <string name="method_uaq">أم القرى: الفجر 18.5°، والعشاء بعد المغرب بـ90 دقيقة، وفي رمضان بـ120 دقيقة</string>
+    <string name="method_qatar">تقويم قطر: الفجر 18°، والعشاء بعد المغرب بـ90 دقيقة</string>
     <string name="weather_humidity">الرطوبة %1$d%%</string>
     <string name="weather_wind">الرياح %1$.0f كم/س</string>
     <string name="weather_last">آخر تحديث %1$s</string>

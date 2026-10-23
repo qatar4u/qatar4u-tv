@@ -210,7 +210,11 @@ fun HomeScreen(
     }
 
     LaunchedEffect(apps.isNotEmpty()) {
-        if (apps.isNotEmpty()) runCatching { firstFocus.requestFocus() }
+        // The first row is composed a frame or two after the app list arrives; try until it takes.
+        if (apps.isNotEmpty()) repeat(10) {
+            kotlinx.coroutines.delay(150)
+            if (runCatching { firstFocus.requestFocus() }.isSuccess) return@LaunchedEffect
+        }
     }
 
     menuFor?.let { app ->
@@ -248,7 +252,14 @@ private fun Header(
     val locale = Locale(if (ar) "ar" else "en")
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
         Column(Modifier.weight(1f)) {
-            Text(PrayerTimes.clock(nowMin, s.use24h), style = MaterialTheme.typography.displayLarge, color = Q4u.TextPrimary)
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(PrayerTimes.clock(nowMin, s.use24h), style = MaterialTheme.typography.displayLarge, color = Q4u.TextPrimary)
+                if (!s.use24h) Text(
+                    if (nowMin < 720) (if (ar) " ص" else " AM") else (if (ar) " م" else " PM"),
+                    style = MaterialTheme.typography.headlineMedium, color = Q4u.TextSecondary,
+                    modifier = Modifier.padding(bottom = 18.dp),
+                )
+            }
             Text(
                 date.format(DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", locale)),
                 style = MaterialTheme.typography.titleLarge, color = Q4u.TextPrimary,

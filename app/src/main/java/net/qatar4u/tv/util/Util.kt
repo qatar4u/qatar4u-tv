@@ -36,7 +36,9 @@ object Lang {
     }
 
     fun wrap(base: Context): Context {
-        val locale = Locale(get(base))
+        val lang = get(base)
+        // Arabic text with Latin digits, the way clocks and prices are written in Qatar.
+        val locale = if (lang == "ar") Locale.Builder().setLanguage("ar").setUnicodeLocaleKeyword("nu", "latn").build() else Locale(lang)
         Locale.setDefault(locale)
         val cfg = Configuration(base.resources.configuration)
         cfg.setLocale(locale)
