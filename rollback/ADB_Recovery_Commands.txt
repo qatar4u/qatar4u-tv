@@ -1,0 +1,67 @@
+# Qatar4u TV — ADB recovery commands for Galaxy Tab S6 (SM-T865)
+# Run from the platform-tools folder after: adb devices (the tablet must show "device").
+# Read Restore_Instructions.md first. Run one line at a time.
+
+# 1. Samsung's own home screen back
+adb shell cmd package set-home-activity com.sec.android.app.launcher/.activities.LauncherActivity
+adb shell input keyevent KEYCODE_HOME
+
+# 2. Re-enable every app that was disabled
+adb shell pm enable com.samsung.android.bixby.agent
+adb shell pm enable com.samsung.android.bixby.agent.dummy
+adb shell pm enable com.samsung.android.bixby.service
+adb shell pm enable com.samsung.android.bixby.wakeup
+adb shell pm enable com.samsung.android.bixbyvision.framework
+adb shell pm enable com.samsung.android.app.settings.bixby
+adb shell pm enable com.samsung.systemui.bixby2
+adb shell pm enable com.samsung.android.visionintelligence
+adb shell pm enable com.samsung.android.visionarapps
+adb shell pm enable com.samsung.android.app.spage
+adb shell pm enable com.samsung.android.rubin.app
+adb shell pm enable com.sec.android.diagmonagent
+adb shell pm enable com.samsung.android.dqagent
+adb shell pm enable com.sec.android.app.DataCreate
+adb shell pm enable com.samsung.android.app.omcagent
+adb shell pm enable flipboard.boxer.app
+adb shell pm enable com.hiya.star
+adb shell pm enable com.microsoft.skydrive
+adb shell pm enable com.google.android.apps.tachyon
+adb shell pm enable com.samsung.android.aremoji
+adb shell pm enable com.samsung.android.ardrawing
+adb shell pm enable com.sec.android.mimage.avatarstickers
+adb shell pm enable com.samsung.android.app.dressroom
+adb shell pm enable com.samsung.android.app.camera.sticker.facear.preload
+adb shell pm enable com.samsung.android.app.camera.sticker.facearavatar.preload
+adb shell pm enable com.samsung.android.app.camera.sticker.facearexpression.preload
+adb shell pm enable com.samsung.android.app.camera.sticker.facearframe.preload
+adb shell pm enable com.samsung.android.app.camera.sticker.stamp.preload
+adb shell pm enable com.samsung.android.game.gamehome
+adb shell pm enable com.samsung.android.game.gametools
+adb shell pm enable com.samsung.android.app.watchmanagerstub
+adb shell pm enable com.samsung.android.app.routines
+adb shell pm enable com.samsung.android.app.reminder
+adb shell pm enable com.samsung.android.kidsinstaller
+adb shell pm enable com.samsung.android.smartswitchassistant
+adb shell pm enable com.sec.android.easyMover.Agent
+adb shell pm enable com.samsung.android.dynamiclock
+adb shell pm enable com.sec.android.widgetapp.webmanual
+adb shell pm enable com.sec.android.widgetapp.samsungapps
+adb shell pm enable com.samsung.android.app.readingglass
+adb shell pm enable com.samsung.android.app.interactivepanoramaviewer
+adb shell pm enable com.samsung.android.app.motionpanoramaviewer
+adb shell pm enable com.samsung.android.app.selfmotionpanoramaviewer
+adb shell pm enable com.samsung.android.app.dofviewer
+
+# 3. Settings back to Samsung defaults
+adb shell settings put global window_animation_scale 1.0
+adb shell settings put global transition_animation_scale 1.0
+adb shell settings put global animator_duration_scale 1.0
+adb shell settings put global stay_on_while_plugged_in 0
+
+# 4. Optional: remove the custom launchers (your own apps, not system apps)
+adb uninstall net.qatar4u.tv
+adb uninstall com.gathin.tvhome
+
+# 5. Check
+adb shell pm list packages -d
+adb shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME

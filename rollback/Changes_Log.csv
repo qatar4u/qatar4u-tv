@@ -1,0 +1,51 @@
+date,type,target,change,undo
+2026-10-23,launcher,com.gathin.tvhome,"Installed Qatar4u TV Home (tv-home) and set it as Home","cmd package set-home-activity com.sec.android.app.launcher/.activities.LauncherActivity"
+2026-10-23,setting,global window_animation_scale,1.0 -> 0.5,settings put global window_animation_scale 1.0
+2026-10-23,setting,global transition_animation_scale,1.0 -> 0.5,settings put global transition_animation_scale 1.0
+2026-10-23,setting,global animator_duration_scale,1.0 -> 0.5,settings put global animator_duration_scale 1.0
+2026-10-23,setting,global stay_on_while_plugged_in,0 -> 7,settings put global stay_on_while_plugged_in 0
+2026-10-23,permission,com.gathin.tvhome,granted ACCESS_FINE_LOCATION (Wi-Fi name),pm revoke com.gathin.tvhome android.permission.ACCESS_FINE_LOCATION
+2026-10-23,disable,com.samsung.android.bixby.agent,pm disable-user --user 0,pm enable com.samsung.android.bixby.agent
+2026-10-23,disable,com.samsung.android.bixby.agent.dummy,pm disable-user --user 0,pm enable com.samsung.android.bixby.agent.dummy
+2026-10-23,disable,com.samsung.android.bixby.service,pm disable-user --user 0,pm enable com.samsung.android.bixby.service
+2026-10-23,disable,com.samsung.android.bixby.wakeup,pm disable-user --user 0,pm enable com.samsung.android.bixby.wakeup
+2026-10-23,disable,com.samsung.android.bixbyvision.framework,pm disable-user --user 0,pm enable com.samsung.android.bixbyvision.framework
+2026-10-23,disable,com.samsung.android.app.settings.bixby,pm disable-user --user 0,pm enable com.samsung.android.app.settings.bixby
+2026-10-23,disable,com.samsung.systemui.bixby2,pm disable-user --user 0,pm enable com.samsung.systemui.bixby2
+2026-10-23,disable,com.samsung.android.visionintelligence,pm disable-user --user 0,pm enable com.samsung.android.visionintelligence
+2026-10-23,disable,com.samsung.android.visionarapps,pm disable-user --user 0,pm enable com.samsung.android.visionarapps
+2026-10-23,disable,com.samsung.android.app.spage,pm disable-user --user 0,pm enable com.samsung.android.app.spage
+2026-10-23,disable,com.samsung.android.rubin.app,pm disable-user --user 0,pm enable com.samsung.android.rubin.app
+2026-10-23,disable,com.sec.android.diagmonagent,pm disable-user --user 0,pm enable com.sec.android.diagmonagent
+2026-10-23,disable,com.samsung.android.dqagent,pm disable-user --user 0,pm enable com.samsung.android.dqagent
+2026-10-23,disable,com.sec.android.app.DataCreate,pm disable-user --user 0,pm enable com.sec.android.app.DataCreate
+2026-10-23,disable,com.samsung.android.app.omcagent,pm disable-user --user 0,pm enable com.samsung.android.app.omcagent
+2026-10-23,disable,flipboard.boxer.app,pm disable-user --user 0,pm enable flipboard.boxer.app
+2026-10-23,disable,com.hiya.star,pm disable-user --user 0,pm enable com.hiya.star
+2026-10-23,disable,com.microsoft.skydrive,pm disable-user --user 0,pm enable com.microsoft.skydrive
+2026-10-23,disable,com.google.android.apps.tachyon,pm disable-user --user 0,pm enable com.google.android.apps.tachyon
+2026-10-23,disable,com.samsung.android.aremoji,pm disable-user --user 0,pm enable com.samsung.android.aremoji
+2026-10-23,disable,com.samsung.android.ardrawing,pm disable-user --user 0,pm enable com.samsung.android.ardrawing
+2026-10-23,disable,com.sec.android.mimage.avatarstickers,pm disable-user --user 0,pm enable com.sec.android.mimage.avatarstickers
+2026-10-23,disable,com.samsung.android.app.dressroom,pm disable-user --user 0,pm enable com.samsung.android.app.dressroom
+2026-10-23,disable,com.samsung.android.app.camera.sticker.facear.preload,pm disable-user --user 0,pm enable com.samsung.android.app.camera.sticker.facear.preload
+2026-10-23,disable,com.samsung.android.app.camera.sticker.facearavatar.preload,pm disable-user --user 0,pm enable com.samsung.android.app.camera.sticker.facearavatar.preload
+2026-10-23,disable,com.samsung.android.app.camera.sticker.facearexpression.preload,pm disable-user --user 0,pm enable com.samsung.android.app.camera.sticker.facearexpression.preload
+2026-10-23,disable,com.samsung.android.app.camera.sticker.facearframe.preload,pm disable-user --user 0,pm enable com.samsung.android.app.camera.sticker.facearframe.preload
+2026-10-23,disable,com.samsung.android.app.camera.sticker.stamp.preload,pm disable-user --user 0,pm enable com.samsung.android.app.camera.sticker.stamp.preload
+2026-10-23,disable,com.samsung.android.game.gamehome,pm disable-user --user 0,pm enable com.samsung.android.game.gamehome
+2026-10-23,disable,com.samsung.android.game.gametools,pm disable-user --user 0,pm enable com.samsung.android.game.gametools
+2026-10-23,disable,com.samsung.android.app.watchmanagerstub,pm disable-user --user 0,pm enable com.samsung.android.app.watchmanagerstub
+2026-10-23,disable,com.samsung.android.app.routines,pm disable-user --user 0,pm enable com.samsung.android.app.routines
+2026-10-23,disable,com.samsung.android.app.reminder,pm disable-user --user 0,pm enable com.samsung.android.app.reminder
+2026-10-23,disable,com.samsung.android.kidsinstaller,pm disable-user --user 0,pm enable com.samsung.android.kidsinstaller
+2026-10-23,disable,com.samsung.android.smartswitchassistant,pm disable-user --user 0,pm enable com.samsung.android.smartswitchassistant
+2026-10-23,disable,com.sec.android.easyMover.Agent,pm disable-user --user 0,pm enable com.sec.android.easyMover.Agent
+2026-10-23,disable,com.samsung.android.dynamiclock,pm disable-user --user 0,pm enable com.samsung.android.dynamiclock
+2026-10-23,disable,com.sec.android.widgetapp.webmanual,pm disable-user --user 0,pm enable com.sec.android.widgetapp.webmanual
+2026-10-23,disable,com.sec.android.widgetapp.samsungapps,pm disable-user --user 0,pm enable com.sec.android.widgetapp.samsungapps
+2026-10-23,disable,com.samsung.android.app.readingglass,pm disable-user --user 0,pm enable com.samsung.android.app.readingglass
+2026-10-23,disable,com.samsung.android.app.interactivepanoramaviewer,pm disable-user --user 0,pm enable com.samsung.android.app.interactivepanoramaviewer
+2026-10-23,disable,com.samsung.android.app.motionpanoramaviewer,pm disable-user --user 0,pm enable com.samsung.android.app.motionpanoramaviewer
+2026-10-23,disable,com.samsung.android.app.selfmotionpanoramaviewer,pm disable-user --user 0,pm enable com.samsung.android.app.selfmotionpanoramaviewer
+2026-10-23,disable,com.samsung.android.app.dofviewer,pm disable-user --user 0,pm enable com.samsung.android.app.dofviewer
