@@ -59,6 +59,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
         reloadApps()
+        // When the network comes back after a failed refresh, fetch again instead of waiting an hour.
+        runCatching {
+            val cm = app.getSystemService(android.net.ConnectivityManager::class.java)
+            cm.registerDefaultNetworkCallback(object : android.net.ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: android.net.Network) {
+                    if (_offline.value) viewModelScope.launch { delay(3_000); refreshWeather() }
+                }
+            })
+        }
         viewModelScope.launch {
             // Refresh on start when the cache is older than the owner's interval.
             val s = store.current()
