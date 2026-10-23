@@ -143,6 +143,7 @@ class MainActivity : ComponentActivity() {
         val now by model.now.collectAsState()
         val weather by model.weather.collectAsState()
         val refreshing by model.refreshing.collectAsState()
+        val offline by model.offline.collectAsState()
         val apps by model.visibleApps.collectAsState()
         val allApps by model.apps.collectAsState()
         var screen by remember { mutableStateOf(Screen.HOME) }
@@ -171,7 +172,7 @@ class MainActivity : ComponentActivity() {
             BackHandler(enabled = screen != Screen.HOME) { screen = Screen.HOME }
             when (screen) {
                 Screen.HOME -> HomeScreen(
-                    s = s, now = now, weather = weather, refreshing = refreshing, apps = apps, wallpaper = wallpaper,
+                    s = s, now = now, weather = weather, refreshing = refreshing, offline = offline, apps = apps, wallpaper = wallpaper,
                     libraryAllowed = libraryAllowed.value,
                     onAskLibrary = { askVideos.launch(videoPermission()) },
                     onRefreshWeather = { model.refreshWeather() },

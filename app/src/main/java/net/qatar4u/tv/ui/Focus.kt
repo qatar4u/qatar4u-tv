@@ -95,6 +95,7 @@ fun FocusButton(
     text: String,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
+    onFocus: (Boolean) -> Unit = {},
     onClick: () -> Unit,
 ) {
     val accent = LocalAccent.current
@@ -103,6 +104,7 @@ fun FocusButton(
         shape = RoundedCornerShape(14.dp),
         background = if (selected) accent.copy(alpha = 0.22f) else Q4u.Surface.copy(alpha = 0.9f),
         focusedScale = 1.03f,
+        onFocus = onFocus,
         onClick = onClick,
     ) { f ->
         Text(

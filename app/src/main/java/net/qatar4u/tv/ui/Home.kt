@@ -127,6 +127,7 @@ fun HomeScreen(
     now: Long,
     weather: WeatherNow?,
     refreshing: Boolean,
+    offline: Boolean,
     apps: List<AppEntry>,
     wallpaper: Bitmap?,
     libraryAllowed: Boolean,
@@ -168,7 +169,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
             item {
-                Header(s, zdt.toLocalDate(), nowMin, ar, zone, weather, refreshing, onRefreshWeather, onOpenSettings)
+                Header(s, zdt.toLocalDate(), nowMin, ar, zone, weather, refreshing, offline, onRefreshWeather, onOpenSettings)
             }
             item { PrayerStrip(times, nowMin, tomorrowFajr, s.use24h, method, ar) }
 
@@ -245,6 +246,7 @@ private fun Header(
     zone: ZoneId,
     weather: WeatherNow?,
     refreshing: Boolean,
+    offline: Boolean,
     onRefresh: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -270,7 +272,7 @@ private fun Header(
             }
         }
         if (s.weatherEnabled) {
-            WeatherCard(weather, refreshing, ar, onRefresh)
+            WeatherCard(weather, refreshing, offline, ar, onRefresh)
             Spacer(Modifier.width(16.dp))
         }
         FocusCard(Modifier.size(64.dp), shape = RoundedCornerShape(32.dp), onClick = onSettings) { f ->
@@ -280,14 +282,14 @@ private fun Header(
 }
 
 @Composable
-private fun WeatherCard(w: WeatherNow?, refreshing: Boolean, ar: Boolean, onRefresh: () -> Unit) {
+private fun WeatherCard(w: WeatherNow?, refreshing: Boolean, offline: Boolean, ar: Boolean, onRefresh: () -> Unit) {
     val accent = LocalAccent.current
     FocusCard(Modifier.width(260.dp), onClick = onRefresh) { f ->
         Column(Modifier.padding(horizontal = 18.dp, vertical = 12.dp)) {
             if (w == null) {
                 Text(stringResource(R.string.weather_none), color = Q4u.TextSecondary, style = MaterialTheme.typography.bodyMedium)
             } else {
-                val stale = System.currentTimeMillis() - w.fetchedAt > Weather.STALE_MS
+                val stale = offline || System.currentTimeMillis() - w.fetchedAt > Weather.STALE_MS
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(weatherGlyph(w.code, w.isDay), fontSize = 34.sp)
                     Spacer(Modifier.width(10.dp))

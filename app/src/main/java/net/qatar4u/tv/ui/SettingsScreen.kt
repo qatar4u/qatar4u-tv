@@ -115,6 +115,8 @@ fun SettingsScreen(
                         stringResource(sec.title),
                         Modifier.fillMaxWidth().then(if (sec == Section.GENERAL) Modifier.focusRequester(first) else Modifier),
                         selected = sec == section,
+                        // Moving down the list previews each section, as TV settings menus do.
+                        onFocus = { if (it) section = sec },
                         onClick = { section = sec },
                     )
                 }

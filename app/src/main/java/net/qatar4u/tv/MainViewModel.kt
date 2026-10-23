@@ -38,6 +38,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val _apps = MutableStateFlow<List<AppEntry>>(emptyList())
     val apps: StateFlow<List<AppEntry>> = _apps
 
+    private val _offline = MutableStateFlow(false)
+    /** True after the last refresh failed, until one succeeds: the reading on screen is the cached one. */
+    val offline: StateFlow<Boolean> = _offline
+
     private val _refreshing = MutableStateFlow(false)
     val refreshing: StateFlow<Boolean> = _refreshing
 
@@ -73,7 +77,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (_refreshing.value) return
         viewModelScope.launch {
             _refreshing.value = true
-            Weather.refresh(getApplication())
+            _offline.value = !Weather.refresh(getApplication())
             _refreshing.value = false
         }
     }
