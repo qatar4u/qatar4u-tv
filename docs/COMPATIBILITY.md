@@ -34,3 +34,19 @@ Read from the tablet over ADB on 23 October 2026.
   The clock in the header is the only element that stays in one place while Home is shown.
 - **Performance budget.** 5.3 GB RAM leaves plenty of room; wallpapers are decoded at screen size only,
   icons are loaded off the main thread and cached by the list.
+
+## TVs, boxes and car screens · التلفزيونات والسيارات (v1.3.0)
+
+The app now runs from **Android 8.0 (API 26)**. It has no native code, so one APK covers ARM and x86.
+
+| Device | Runs? | Notes |
+|---|---|---|
+| Android TV / Google TV (TCL, Sony, Philips, Xiaomi, Chromecast, Shield) | Yes | Shows in the app list; replacing the home screen is blocked on many Google TV builds. |
+| Amazon Fire TV, Fire OS 7 and 8 | Yes | Fire OS 6 (Android 7.1) is below the minimum. Fire TV does not allow a different home screen. |
+| Samsung (Tizen), LG (webOS), Hisense (VIDAA), Roku, Apple TV | No | Not Android; use an Android box. |
+| Car screens on Android 8+ (Geely, MG, Haval, Tank, Changan, BYD, JAC, Jetour, GAC, Hongqi, BAIC) | Yes, if the head unit allows installing APKs | Many factory head units block outside apps or need the maker's engineering mode; that is the car's setting, not the app's. |
+
+Car and portrait screens: on screens under 640 dp wide (BYD's rotating screen in portrait, for example)
+the weather card moves under the clock and prayer times show in two rows of three. Without Google Play
+(most head units) the "suggested apps" row is hidden. Videos still play through the car's own player,
+which on most cars refuses video while driving; the app does not get around that.

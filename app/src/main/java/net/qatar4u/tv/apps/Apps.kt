@@ -102,6 +102,9 @@ object Apps {
         return start(context, intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
+    /** Car head units and many boxes ship without Google Play; the suggestions row is hidden there. */
+    fun hasPlayStore(context: Context): Boolean = isInstalled(context, "com.android.vending")
+
     fun openInPlay(context: Context, pkg: String): Boolean =
         start(context, Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pkg")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             || start(context, Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$pkg")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))

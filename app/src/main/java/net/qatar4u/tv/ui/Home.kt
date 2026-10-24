@@ -159,7 +159,8 @@ fun HomeScreen(
     val entertainment = apps.filter { isEnt(it) && it.pkg !in s.favorites }
     val others = apps.filter { !isEnt(it) && it.pkg !in s.favorites }
     val installed = apps.map { it.pkg }.toSet()
-    val suggested = Apps.ENTERTAINMENT.filter { it.pkg !in installed && it.pkg !in s.hidden }
+    val hasPlay = remember { Apps.hasPlayStore(context) }
+    val suggested = if (!hasPlay) emptyList() else Apps.ENTERTAINMENT.filter { it.pkg !in installed && it.pkg !in s.hidden }
 
     Box(Modifier.fillMaxSize()) {
         WallpaperLayer(wallpaper)
@@ -263,6 +264,9 @@ private fun Header(
 ) {
     val accent = LocalAccent.current
     val locale = Locale(if (ar) "ar" else "en")
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+    val narrow = maxWidth < 640.dp
+    Column {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
         Column(Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.Bottom) {
@@ -282,13 +286,19 @@ private fun Header(
                 Text("  ·  " + cityName(s), style = MaterialTheme.typography.bodyLarge, color = Q4u.TextSecondary)
             }
         }
-        if (s.weatherEnabled) {
+        if (s.weatherEnabled && !narrow) {
             WeatherCard(weather, refreshing, offline, ar, onRefresh)
             Spacer(Modifier.width(16.dp))
         }
         FocusCard(Modifier.size(64.dp), shape = RoundedCornerShape(32.dp), onClick = onSettings) { f ->
             Icon(Icons.Filled.Settings, stringResource(R.string.settings), tint = if (f) accent else Q4u.TextPrimary, modifier = Modifier.size(30.dp))
         }
+    }
+    if (s.weatherEnabled && narrow) {
+        Spacer(Modifier.height(12.dp))
+        WeatherCard(weather, refreshing, offline, ar, onRefresh)
+    }
+    }
     }
 }
 
@@ -345,9 +355,13 @@ private fun PrayerStrip(times: IntArray, nowMin: Int, tomorrowFajr: Int, use24h:
     val next = PrayerTimes.next(times, nowMin)
     val left = PrayerTimes.minutesUntilNext(times, nowMin, tomorrowFajr)
     val accent = LocalAccent.current
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+    val perRow = if (maxWidth < 640.dp) 3 else 6
     Column {
+        for (start in 0 until 6 step perRow) {
+        if (start > 0) Spacer(Modifier.height(10.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            for (i in 0 until 6) {
+            for (i in start until start + perRow) {
                 val isNext = i == next
                 Column(
                     Modifier.weight(1f)
@@ -361,12 +375,14 @@ private fun PrayerStrip(times: IntArray, nowMin: Int, tomorrowFajr: Int, use24h:
                 }
             }
         }
+        }
         Spacer(Modifier.height(6.dp))
         Text(
             stringResource(R.string.next_prayer, names[next], durationText(left)) + "   ·   " +
                 stringResource(if (method.id == net.qatar4u.tv.data.PrayerMethodId.QATAR) R.string.method_qatar else R.string.method_uaq),
             color = Q4u.TextSecondary, style = MaterialTheme.typography.bodyMedium,
         )
+    }
     }
 }
 
