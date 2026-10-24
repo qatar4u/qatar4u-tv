@@ -42,6 +42,9 @@ data class AppSettings(
     val appOrder: List<String> = emptyList(),
     val favorites: Set<String> = emptySet(),
     val hidden: Set<String> = emptySet(),
+    /** Apps the owner put in the entertainment row, and ones taken out of it. */
+    val entertainment: Set<String> = emptySet(),
+    val notEntertainment: Set<String> = emptySet(),
     val tvSafeArea: Int = 0,
     val use24h: Boolean = false,
 )
@@ -69,6 +72,8 @@ class SettingsStore(private val context: Context) {
         val order = stringPreferencesKey("app_order")
         val favorites = stringPreferencesKey("favorites")
         val hidden = stringPreferencesKey("hidden")
+        val entertainment = stringPreferencesKey("entertainment")
+        val notEntertainment = stringPreferencesKey("not_entertainment")
         val safeArea = intPreferencesKey("tv_safe_area")
         val use24h = booleanPreferencesKey("use_24h")
 
@@ -102,6 +107,8 @@ class SettingsStore(private val context: Context) {
             p[K.order] = s.appOrder.joinToString(",")
             p[K.favorites] = s.favorites.joinToString(",")
             p[K.hidden] = s.hidden.joinToString(",")
+            p[K.entertainment] = s.entertainment.joinToString(",")
+            p[K.notEntertainment] = s.notEntertainment.joinToString(",")
             p[K.safeArea] = s.tvSafeArea
             p[K.use24h] = s.use24h
         }
@@ -128,6 +135,8 @@ class SettingsStore(private val context: Context) {
             appOrder = p[K.order]?.split(",")?.filter { it.isNotBlank() } ?: d.appOrder,
             favorites = p[K.favorites]?.split(",")?.filter { it.isNotBlank() }?.toSet() ?: d.favorites,
             hidden = p[K.hidden]?.split(",")?.filter { it.isNotBlank() }?.toSet() ?: d.hidden,
+            entertainment = p[K.entertainment]?.split(",")?.filter { it.isNotBlank() }?.toSet() ?: d.entertainment,
+            notEntertainment = p[K.notEntertainment]?.split(",")?.filter { it.isNotBlank() }?.toSet() ?: d.notEntertainment,
             tvSafeArea = p[K.safeArea] ?: d.tvSafeArea,
             use24h = p[K.use24h] ?: d.use24h,
         )
@@ -156,7 +165,9 @@ class SettingsStore(private val context: Context) {
         put("wallpaperMinutes", s.wallpaperMinutes); put("pinnedWallpaper", s.pinnedWallpaper)
         put("accent", s.accent.name); put("screensaverMinutes", s.screensaverMinutes)
         put("appOrder", s.appOrder.joinToString(",")); put("favorites", s.favorites.joinToString(","))
-        put("hidden", s.hidden.joinToString(",")); put("tvSafeArea", s.tvSafeArea); put("use24h", s.use24h)
+        put("hidden", s.hidden.joinToString(","))
+        put("entertainment", s.entertainment.joinToString(",")); put("notEntertainment", s.notEntertainment.joinToString(","))
+        put("tvSafeArea", s.tvSafeArea); put("use24h", s.use24h)
         // The PIN is deliberately not exported.
     }.toString(2)
 
@@ -184,6 +195,8 @@ class SettingsStore(private val context: Context) {
             appOrder = list("appOrder"),
             favorites = list("favorites").toSet(),
             hidden = list("hidden").toSet(),
+            entertainment = list("entertainment").toSet(),
+            notEntertainment = list("notEntertainment").toSet(),
             tvSafeArea = o.optInt("tvSafeArea", 0).coerceIn(0, 10),
             use24h = o.optBoolean("use24h", false),
         )

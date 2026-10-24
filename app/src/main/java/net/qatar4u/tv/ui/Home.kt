@@ -155,8 +155,9 @@ fun HomeScreen(
     val failed = stringResource(R.string.open_failed)
 
     val favorites = apps.filter { it.pkg in s.favorites }
-    val entertainment = apps.filter { it.isEntertainment && it.pkg !in s.favorites }
-    val others = apps.filter { !it.isEntertainment && it.pkg !in s.favorites }
+    fun isEnt(a: AppEntry) = (a.isEntertainment || a.pkg in s.entertainment) && a.pkg !in s.notEntertainment
+    val entertainment = apps.filter { isEnt(it) && it.pkg !in s.favorites }
+    val others = apps.filter { !isEnt(it) && it.pkg !in s.favorites }
     val installed = apps.map { it.pkg }.toSet()
     val suggested = Apps.ENTERTAINMENT.filter { it.pkg !in installed && it.pkg !in s.hidden }
 
@@ -222,6 +223,7 @@ fun HomeScreen(
         AppMenu(
             app = app,
             isFavorite = app.pkg in s.favorites,
+            inEntertainment = isEnt(app),
             onDismiss = { menuFor = null },
             onFavorite = {
                 onChange { st -> st.copy(favorites = if (app.pkg in st.favorites) st.favorites - app.pkg else st.favorites + app.pkg) }
@@ -230,6 +232,14 @@ fun HomeScreen(
             onMove = { delta ->
                 val order = Apps.move(apps.map { it.pkg }, app.pkg, delta)
                 onChange { st -> st.copy(appOrder = order) }
+            },
+            onEntertainment = {
+                val now = isEnt(app)
+                onChange { st ->
+                    if (now) st.copy(entertainment = st.entertainment - app.pkg, notEntertainment = st.notEntertainment + app.pkg)
+                    else st.copy(entertainment = st.entertainment + app.pkg, notEntertainment = st.notEntertainment - app.pkg)
+                }
+                menuFor = null
             },
             onHide = { onChange { st -> st.copy(hidden = st.hidden + app.pkg) }; menuFor = null },
             onInfo = { Apps.openAppInfo(context, app.pkg); menuFor = null },
@@ -469,8 +479,10 @@ private fun LibraryRow(allowed: Boolean, onAsk: () -> Unit, onToast: (String) ->
 private fun AppMenu(
     app: AppEntry,
     isFavorite: Boolean,
+    inEntertainment: Boolean,
     onDismiss: () -> Unit,
     onFavorite: () -> Unit,
+    onEntertainment: () -> Unit,
     onMove: (Int) -> Unit,
     onHide: () -> Unit,
     onInfo: () -> Unit,
@@ -486,6 +498,10 @@ private fun AppMenu(
             FocusButton(
                 stringResource(if (isFavorite) R.string.menu_favorite_remove else R.string.menu_favorite_add),
                 Modifier.fillMaxWidth().focusRequester(first), onClick = onFavorite,
+            )
+            FocusButton(
+                stringResource(if (inEntertainment) R.string.menu_entertainment_remove else R.string.menu_entertainment_add),
+                Modifier.fillMaxWidth(), onClick = onEntertainment,
             )
             FocusButton(stringResource(R.string.menu_move_left), Modifier.fillMaxWidth(), onClick = { onMove(-1) })
             FocusButton(stringResource(R.string.menu_move_right), Modifier.fillMaxWidth(), onClick = { onMove(1) })

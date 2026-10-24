@@ -59,7 +59,8 @@ object Apps {
                     label = ri.loadLabel(pm).toString(),
                     component = ComponentName(ai.packageName, ai.name),
                     hasBanner = appInfo.banner != 0 || ai.banner != 0,
-                    isEntertainment = ai.packageName in entertainmentSet,
+                    // Known streaming apps, plus any app that declares itself a video app.
+                    isEntertainment = ai.packageName in entertainmentSet || appInfo.category == ApplicationInfo.CATEGORY_VIDEO,
                     isSystem = appInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0,
                 )
             }

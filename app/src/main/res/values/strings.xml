@@ -34,6 +34,8 @@
     <string name="menu_unhide">Show again</string>
     <string name="menu_info">App info</string>
     <string name="menu_uninstall">Uninstall</string>
+    <string name="menu_entertainment_add">Move to Entertainment</string>
+    <string name="menu_entertainment_remove">Remove from Entertainment</string>
     <string name="close">Close</string>
     <string name="back">Back</string>
     <string name="open_failed">Could not open this app</string>

@@ -33,6 +33,8 @@
     <string name="menu_unhide">أظهره</string>
     <string name="menu_info">معلومات التطبيق</string>
     <string name="menu_uninstall">احذف التطبيق</string>
+    <string name="menu_entertainment_add">انقله إلى الترفيه</string>
+    <string name="menu_entertainment_remove">أخرجه من الترفيه</string>
     <string name="close">إغلاق</string>
     <string name="back">رجوع</string>
     <string name="open_failed">تعذّر فتح التطبيق</string>
