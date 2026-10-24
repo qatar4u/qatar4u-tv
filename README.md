@@ -18,9 +18,9 @@ stock Android 10 and later, with no root and no system changes.
   the tablet is offline it shows the last reading with its time, marked as offline. Refreshes about hourly
   in the background and on demand.
 - **Entertainment hub.** Lists only the apps that are actually installed and opens them with their own
-  launch intent. YouTube, Netflix, Shahid, Disney+, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
+  launch intent. YouTube, Netflix, Shahid, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
   missing ones open their Google Play page. Favourites, reordering and hiding. A local video library row.
-- **Qatar wallpapers** stored on the tablet: the owner's photos plus ten original night illustrations.
+- **Qatar wallpapers** stored on the tablet: the owner's own photos of Qatar.
   Changes on a schedule you pick, or stays pinned. Add more pictures from the tablet.
 - **Screensaver** that dims the wallpaper and moves the clock every minute to spare the AMOLED panel,
   plus a system screensaver (Settings > Display > Screen saver).
@@ -63,5 +63,4 @@ asked for only when you tap "Use my location" and stays on the tablet. No analyt
 ## Credits
 
 Weather data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0). Cairo font, SIL Open Font
-License (`licenses/Cairo-OFL.txt`). Illustrations drawn from code for this project; photos supplied by the
-owner, who holds the rights to them.
+License (`licenses/Cairo-OFL.txt`). Wallpaper photos supplied by the owner, who holds the rights to them.

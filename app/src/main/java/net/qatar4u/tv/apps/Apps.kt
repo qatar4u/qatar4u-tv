@@ -35,7 +35,6 @@ object Apps {
         Suggested("com.google.android.youtube", "يوتيوب", "YouTube"),
         Suggested("com.netflix.mediaclient", "نتفليكس", "Netflix"),
         Suggested("net.mbc.shahid", "شاهد", "Shahid"),
-        Suggested("com.disney.disneyplus", "ديزني+", "Disney+"),
         Suggested("com.osn.go", "OSN+", "OSN+"),
         Suggested("com.parsifal.starz", "ستارز بلاي", "STARZPLAY"),
         Suggested("org.videolan.vlc", "VLC", "VLC"),
@@ -108,6 +107,11 @@ object Apps {
 
     fun openAppInfo(context: Context, pkg: String): Boolean =
         start(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$pkg")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+
+    /** Opens the system's own uninstall confirmation; the owner confirms there. */
+    fun uninstall(context: Context, pkg: String): Boolean =
+        start(context, Intent(Intent.ACTION_DELETE, Uri.parse("package:$pkg")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            || openAppInfo(context, pkg)
 
     fun start(context: Context, intent: Intent): Boolean = try {
         context.startActivity(intent); true

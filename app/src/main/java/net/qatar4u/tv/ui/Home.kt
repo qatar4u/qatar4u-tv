@@ -233,6 +233,7 @@ fun HomeScreen(
             },
             onHide = { onChange { st -> st.copy(hidden = st.hidden + app.pkg) }; menuFor = null },
             onInfo = { Apps.openAppInfo(context, app.pkg); menuFor = null },
+            onUninstall = { Apps.uninstall(context, app.pkg); menuFor = null },
         )
     }
 }
@@ -473,6 +474,7 @@ private fun AppMenu(
     onMove: (Int) -> Unit,
     onHide: () -> Unit,
     onInfo: () -> Unit,
+    onUninstall: () -> Unit,
 ) {
     val first = remember { FocusRequester() }
     Dialog(onDismissRequest = onDismiss) {
@@ -489,6 +491,8 @@ private fun AppMenu(
             FocusButton(stringResource(R.string.menu_move_right), Modifier.fillMaxWidth(), onClick = { onMove(1) })
             FocusButton(stringResource(R.string.menu_hide), Modifier.fillMaxWidth(), onClick = onHide)
             FocusButton(stringResource(R.string.menu_info), Modifier.fillMaxWidth(), onClick = onInfo)
+            // Built-in system apps can't be removed, only disabled from App info.
+            if (!app.isSystem) FocusButton(stringResource(R.string.menu_uninstall), Modifier.fillMaxWidth(), onClick = onUninstall)
             FocusButton(stringResource(R.string.close), Modifier.fillMaxWidth(), onClick = onDismiss)
         }
         LaunchedEffect(Unit) { runCatching { first.requestFocus() } }

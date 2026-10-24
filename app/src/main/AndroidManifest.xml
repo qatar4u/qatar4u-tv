@@ -7,6 +7,8 @@
 
     <!-- Weather from Open-Meteo, the only network call the app makes. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Lets the app menu open the system uninstall dialog. -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Asked only when the owner taps "Use my location"; a city picked from the list needs nothing. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
