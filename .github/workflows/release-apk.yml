@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -28,8 +28,13 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # ubuntu-24.04 runners ship the Android SDK with licenses accepted.
       - id: sdk
-        uses: android-actions/setup-android@v3
+        name: Check Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          test -d "$ANDROID_HOME/platforms"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-34" "build-tools;34.0.0" > /dev/null || true
 
       - id: gradle
         uses: gradle/actions/setup-gradle@v4
