@@ -65,7 +65,7 @@ jobs:
       # One post only: remove every earlier release and its tag before publishing the new one.
       - name: Remove earlier releases
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
         run: |
           gh release list -R "$GITHUB_REPOSITORY" --limit 100 --json tagName -q '.[].tagName' |
             while read -r t; do gh release delete "$t" -R "$GITHUB_REPOSITORY" --yes --cleanup-tag; done
@@ -79,6 +79,8 @@ jobs:
           make_latest: "true"
           files: qatar4u-tv.apk
           body_path: release-notes.md
+          # With the owner's token the release is published as qatar4u, not github-actions.
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
 
       # The run log isn't reachable from outside GitHub, so put the failure in an annotation.
       - name: Report failure
