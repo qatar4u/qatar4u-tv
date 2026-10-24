@@ -3,7 +3,7 @@
 **آخر نسخة دائمًا** (يُستخدم في تطبيق Downloader، ويتحدّث تلقائيًا مع كل إصدار جديد):
 https://github.com/qatar4u/qatar4u-tv/releases/latest/download/qatar4u-tv.apk
 
-**هذه النسخة بالتحديد 1.3.0** (لا يتغيّر، للتثبيت عبر فلاشة USB أو للرجوع لهذه النسخة لاحقًا):
+**رابط النسخة 1.3.0** (للتثبيت عبر فلاشة USB أو للمشاركة باسم النسخة):
 https://github.com/qatar4u/qatar4u-tv/releases/download/{{TAG}}/qatar4u-tv.apk
 
 ## الجديد في 1.3.0
