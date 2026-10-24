@@ -58,7 +58,9 @@ jobs:
         run: |
           v=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
           echo "tag=v${v}-build${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
-          echo "name=Qatar4u TV ${v} (build ${GITHUB_RUN_NUMBER})" >> "$GITHUB_OUTPUT"
+          echo "name=Qatar4u TV ${v}" >> "$GITHUB_OUTPUT"
+          # Release post from .github/RELEASE_NOTES.md, with this build's own tag in the fixed-version link.
+          sed "s#{{TAG}}#v${v}-build${GITHUB_RUN_NUMBER}#g" .github/RELEASE_NOTES.md > release-notes.md
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
@@ -68,9 +70,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           make_latest: "true"
           files: qatar4u-tv.apk
-          body: |
-            Direct link for the Downloader app:
-            https://github.com/qatar4u/qatar4u-tv/releases/latest/download/qatar4u-tv.apk
+          body_path: release-notes.md
 
       # The run log isn't reachable from outside GitHub, so put the failure in an annotation.
       - name: Report failure
