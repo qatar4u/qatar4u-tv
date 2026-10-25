@@ -28,10 +28,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -62,6 +64,7 @@ import net.qatar4u.tv.prayer.PrayerMethod
 import net.qatar4u.tv.prayer.PrayerTimes
 import net.qatar4u.tv.util.Dex
 import net.qatar4u.tv.util.Pin
+import kotlin.math.roundToInt
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -284,6 +287,38 @@ private fun Look(s: AppSettings, onChange: ((AppSettings) -> AppSettings) -> Uni
         Choices(Accent.entries.toList(), s.accent, {
             stringResource(when (it) { Accent.GOLD -> R.string.accent_gold; Accent.MAROON -> R.string.accent_maroon; Accent.PEARL -> R.string.accent_pearl })
         }) { v -> onChange { it.copy(accent = v) } }
+        var transparency by remember(s.appCardOpacityPercent) {
+            mutableFloatStateOf((100 - s.appCardOpacityPercent).toFloat())
+        }
+        Label(stringResource(R.string.card_transparency, transparency.roundToInt()))
+        Slider(
+            value = transparency,
+            onValueChange = { transparency = it },
+            onValueChangeFinished = {
+                val opacity = 100 - transparency.roundToInt()
+                onChange { it.copy(appCardOpacityPercent = opacity) }
+            },
+            valueRange = 0f..100f,
+            steps = 19,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            FocusButton(stringResource(R.string.card_less_transparent), onClick = {
+                onChange { it.copy(appCardOpacityPercent = (it.appCardOpacityPercent + 5).coerceAtMost(100)) }
+            })
+            FocusButton(stringResource(R.string.card_more_transparent), onClick = {
+                onChange { it.copy(appCardOpacityPercent = (it.appCardOpacityPercent - 5).coerceAtLeast(0)) }
+            })
+        }
+        // Only the surface uses alpha: labels, icons and the focus outline keep their contrast.
+        FocusCard(
+            Modifier.width(224.dp).height(126.dp),
+            background = Q4u.Surface.copy(alpha = 1f - transparency / 100f),
+            onClick = {},
+        ) { Text(stringResource(R.string.card_preview), color = Q4u.TextPrimary) }
+        Note(stringResource(R.string.card_transparency_note))
+        FocusButton(stringResource(R.string.card_reset), onClick = {
+            onChange { it.copy(appCardOpacityPercent = 82) }
+        })
     }
 }
 

@@ -108,4 +108,10 @@
     <string name="home_default">Make Qatar4u TV the home screen</string>
     <string name="version">Version %1$s</string>
     <string name="location_searching">Finding your location…</string>
+    <string name="card_transparency">App card background transparency: %1$d%%</string>
+    <string name="card_less_transparent">Less transparent</string>
+    <string name="card_more_transparent">More transparent</string>
+    <string name="card_preview">App card preview</string>
+    <string name="card_transparency_note">0% is opaque; 100% is transparent. App icons, banners and names stay clear. Use the buttons with your remote.</string>
+    <string name="card_reset">Reset card background</string>
 </resources>

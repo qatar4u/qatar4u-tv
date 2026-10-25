@@ -185,6 +185,7 @@ fun HomeScreen(
                     AppRow(
                         title = stringResource(title),
                         apps = list,
+                        cardOpacity = s.appCardOpacityPercent,
                         favorites = s.favorites,
                         firstFocus = if (rowIndex == 0) firstFocus else null,
                         onOpen = { if (!Apps.launch(context, it)) onToast(failed) },
@@ -197,7 +198,7 @@ fun HomeScreen(
                     RowTitle(stringResource(R.string.suggested))
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(vertical = 10.dp, horizontal = 6.dp)) {
                         items(suggested, key = { it.pkg }) { sug ->
-                            FocusCard(Modifier.width(200.dp).height(96.dp), onClick = { Apps.openInPlay(context, sug.pkg) }) { f ->
+                            FocusCard(Modifier.width(200.dp).height(96.dp), background = Q4u.Surface.copy(alpha = s.appCardOpacityPercent / 100f), onClick = { Apps.openInPlay(context, sug.pkg) }) { f ->
                                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(14.dp)) {
                                     Icon(Icons.Filled.Shop, null, tint = if (f) LocalAccent.current else Q4u.TextSecondary)
                                     Spacer(Modifier.width(10.dp))
@@ -395,6 +396,7 @@ fun RowTitle(text: String) {
 private fun AppRow(
     title: String,
     apps: List<AppEntry>,
+    cardOpacity: Int,
     favorites: Set<String>,
     firstFocus: FocusRequester?,
     onOpen: (AppEntry) -> Unit,
@@ -408,6 +410,7 @@ private fun AppRow(
                 AppCard(
                     app,
                     favorite = app.pkg in favorites,
+                    cardOpacity = cardOpacity,
                     modifier = if (i == 0 && firstFocus != null) Modifier.focusRequester(firstFocus) else Modifier,
                     onClick = { onOpen(app) },
                     onLongClick = { onMenu(app) },
@@ -418,7 +421,7 @@ private fun AppRow(
 }
 
 @Composable
-private fun AppCard(app: AppEntry, favorite: Boolean, modifier: Modifier, onClick: () -> Unit, onLongClick: () -> Unit) {
+private fun AppCard(app: AppEntry, favorite: Boolean, cardOpacity: Int, modifier: Modifier, onClick: () -> Unit, onLongClick: () -> Unit) {
     val context = LocalContext.current
     val density = LocalDensity.current
     val wPx = with(density) { 224.dp.roundToPx() }
@@ -432,6 +435,7 @@ private fun AppCard(app: AppEntry, favorite: Boolean, modifier: Modifier, onClic
         var focused by remember { mutableStateOf(false) }
         FocusCard(
             modifier.width(224.dp).height(126.dp),
+            background = Q4u.Surface.copy(alpha = cardOpacity.coerceIn(0, 100) / 100f),
             onFocus = { focused = it },
             onLongClick = onLongClick,
             onClick = onClick,

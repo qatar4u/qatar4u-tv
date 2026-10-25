@@ -105,4 +105,10 @@
     <string name="home_default">اجعل Qatar4u TV الشاشة الرئيسية</string>
     <string name="version">الإصدار %1$s</string>
     <string name="location_searching">جارٍ تحديد موقعك…</string>
+    <string name="card_transparency">شفافية خلفية بطاقات التطبيقات: %1$d%%</string>
+    <string name="card_less_transparent">تقليل الشفافية</string>
+    <string name="card_more_transparent">زيادة الشفافية</string>
+    <string name="card_preview">معاينة بطاقة التطبيق</string>
+    <string name="card_transparency_note">٠٪ خلفية معتمة، و١٠٠٪ خلفية شفافة. تبقى أيقونات التطبيقات وصورها وأسماؤها واضحة. استخدم الزرين للتعديل بالريموت.</string>
+    <string name="card_reset">استعادة خلفية البطاقات الافتراضية</string>
 </resources>
