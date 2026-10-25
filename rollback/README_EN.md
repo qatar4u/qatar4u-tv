@@ -15,6 +15,7 @@ This package puts the Galaxy Tab S6 (SM-T865) back the way it was before Qatar4u
 ## What was changed
 
 - 44 Samsung apps disabled (Bixby, ad and telemetry services, AR stickers, Game Launcher and a few more). Disabled, not removed: each can be enabled again at any time.
+- Samsung One UI Home disabled (26 Oct); the Recents button stops working with it.
 - Animations set to half length.
 - Screen kept on while charging.
 - Qatar4u TV Home, then Qatar4u TV, installed, and the launcher made the Home app.
