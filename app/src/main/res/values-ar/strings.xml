@@ -111,4 +111,22 @@
     <string name="card_preview">معاينة بطاقة التطبيق</string>
     <string name="card_transparency_note">٠٪ خلفية معتمة، و١٠٠٪ خلفية شفافة. تبقى أيقونات التطبيقات وصورها وأسماؤها واضحة. استخدم الزرين للتعديل بالريموت.</string>
     <string name="card_reset">استعادة خلفية البطاقات الافتراضية</string>
+    <string name="s_downloads">تنزيل التطبيقات</string>
+    <string name="download_help">أدخل كود Downloader من AFTVnews أو رابط HTTPS مباشر لملف APK. الكود يختصر رابط ملف مستضاف ولا يرفع التطبيق.</string>
+    <string name="download_input">كود Downloader أو رابط HTTPS</string>
+    <string name="download_resolve">عرض رابط الوجهة</string>
+    <string name="download_resolving">جارٍ جلب الرابط…</string>
+    <string name="download_error">تعذّر جلب الرابط أو التنزيل. تحقق من الكود والاتصال. تدعم هذه النسخة روابط HTTPS فقط.</string>
+    <string name="download_webpage">هذا الكود يفتح صفحة ويب وليس ملف APK مباشرًا. افتح الصفحة في المتصفح للمتابعة.</string>
+    <string name="download_open_page">فتح الصفحة</string>
+    <string name="download_start">تنزيل APK</string>
+    <string name="download_ready">اكتمل التنزيل</string>
+    <string name="download_failed">فشل التنزيل. احذف هذا التنزيل وأعد المحاولة.</string>
+    <string name="download_paused">التنزيل متوقف مؤقتًا بانتظار الاتصال</string>
+    <string name="download_running">جارٍ التنزيل…</string>
+    <string name="download_install">تثبيت APK</string>
+    <string name="download_install_help">قد يطلب أندرويد السماح بالتثبيت من Qatar4u TV. بعد السماح ارجع واضغط تثبيت APK مرة أخرى، ثم أكّد التثبيت في شاشة أندرويد.</string>
+    <string name="download_install_error">تعذّر فتح المثبّت. تحقق من أن الملف APK صالح وأن مثبّت التطبيقات متاح.</string>
+    <string name="download_cancel">إلغاء التنزيل</string>
+    <string name="download_delete">حذف الملف المنزّل</string>
 </resources>

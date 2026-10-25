@@ -72,7 +72,7 @@ enum class Section(val title: Int) {
     GENERAL(R.string.s_general), LOCATION(R.string.s_location), PRAYER(R.string.s_prayer), WEATHER(R.string.s_weather),
     WALLPAPERS(R.string.s_wallpapers), APPS(R.string.s_apps), LOOK(R.string.s_look), SCREENSAVER(R.string.s_screensaver),
     REMOTE(R.string.s_remote), DISPLAY(R.string.s_display), BACKUP(R.string.s_backup), OPTIMIZE(R.string.s_optimize),
-    SECURITY(R.string.s_security), ABOUT(R.string.s_about),
+    DOWNLOADS(R.string.s_downloads), SECURITY(R.string.s_security), ABOUT(R.string.s_about),
 }
 
 /** What the settings screen needs from the activity: pickers and permissions live there. */
@@ -147,6 +147,7 @@ fun SettingsScreen(
                             Section.BACKUP -> Backup(a)
                             Section.OPTIMIZE -> Optimize()
                             Section.SECURITY -> Security(s, onChange, a)
+                            Section.DOWNLOADS -> DownloaderScreen(a.onToast)
                             Section.ABOUT -> About()
                         }
                     }

@@ -57,10 +57,20 @@ then `tools\install-windows.ps1`.
 
 ## Privacy
 
-The only network request is the Open-Meteo forecast for your city's coordinates, over HTTPS. Location is
+Weather requests use Open-Meteo over HTTPS. The optional Download apps section contacts AFTVnews and the destination chosen by the owner, then uses Android DownloadManager to download an APK. No credentials or browser sessions are copied. Location is
 asked for only when you tap "Use my location" and stays on the tablet. No analytics, no accounts.
 
 ## Credits
 
 Weather data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0). Cairo font, SIL Open Font
 License (`licenses/Cairo-OFL.txt`). Wallpaper photos supplied by the owner, who holds the rights to them.
+
+## Downloader codes (1.5.0 candidate)
+
+Settings > Download apps accepts AFTVnews numeric Downloader codes (including Arabic digits) and direct HTTPS APK URLs. Use the remote keypad or type/paste a link, show the destination, then explicitly download. Progress, cancellation/deletion and reopening the last download are supported across app restarts. Only one download is managed at a time; starting another removes the previous completed/failed file.
+
+Codes are URL shortcuts: host your APK first and generate a code at https://go.aftvnews.com/. This app does not upload files or generate AFTVnews codes. Pages requiring JavaScript, login or extra clicks open in an external browser; HTTP-only destinations are not supported. Resolution depends on the public shortener page and may need updating if its format changes.
+
+Install APK validates the package archive and opens Android's installer. If prompted, allow installation from Qatar4u TV, return, and press Install APK again. Every install requires Android confirmation. Split APK bundles (APKS/XAPK), silent installation and automatic updating are not supported.
+
+Validation: unit tests cover input normalization, the manual redirect parser and rejection of unsupported schemes/credentials. Before publishing, test a known developer-hosted APK code on Android 10, including consent, denied permission, completion, cancellation, offline/reconnection and process recreation. No arbitrary third-party app was installed during development.
