@@ -50,3 +50,4 @@ date,type,target,change,undo
 2026-10-23,disable,com.samsung.android.app.selfmotionpanoramaviewer,pm disable-user --user 0,pm enable com.samsung.android.app.selfmotionpanoramaviewer
 2026-10-23,disable,com.samsung.android.app.dofviewer,pm disable-user --user 0,pm enable com.samsung.android.app.dofviewer
 2026-10-26,disable,com.sec.android.app.launcher,pm disable-user --user 0 (One UI Home; Recents button stops working),pm enable com.sec.android.app.launcher
+2026-10-26,enable,com.sec.android.app.launcher,re-enabled the same day and made Home again (One UI Home is active),none needed
