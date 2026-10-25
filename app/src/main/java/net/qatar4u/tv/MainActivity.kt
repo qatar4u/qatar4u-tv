@@ -267,6 +267,10 @@ class MainActivity : ComponentActivity() {
 
     // ---- input: idle tracking, screensaver exit, remote test ------------------------------------------
 
+    // This is the public Activity input callback, needed to consume the screensaver wake key.
+    // Lint inherits the library restriction from the AndroidX core compatibility superclass.
+    // Keep its dispatch chain so Compose focus and key handling still receive normal events.
+    @SuppressLint("RestrictedApi")
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         lastInput.longValue = System.currentTimeMillis()
         if (event.action == KeyEvent.ACTION_DOWN) lastKey.value = KeyEvent.keyCodeToString(event.keyCode).removePrefix("KEYCODE_")

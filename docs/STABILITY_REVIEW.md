@@ -23,6 +23,8 @@ Do not merge or publish during review. Record findings with file/line references
 
 Local Gradle execution was attempted but blocked while downloading Gradle 8.9 (`Network is unreachable`). No local Android build or unit-test pass is claimed. GitHub Actions must provide the build, lint, and test evidence for this exact commit.
 
+Initial CI run 40234745173 compiled the Kotlin sources and passed all 12 unit tests (4 location, 8 prayer). Lint reported three instances of the same inherited AndroidX RestrictedApi annotation on the public Activity dispatchKeyEvent callback. A narrowly scoped suppression documents why this framework override and its superclass dispatch are retained for remote/screensaver behavior. The complete validation must pass again after this change; no lint category is disabled project-wide.
+
 The historical `TEST_REPORT.md` concerns version 1.0.0 and is not acceptance evidence for this candidate.
 
 ## Device acceptance before publication
