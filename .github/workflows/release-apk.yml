@@ -1,19 +1,24 @@
-# Builds the APK on every push to main and publishes it as a GitHub release.
+# Validates changes and uploads a test APK. Publishing requires a manual main-branch run.
 # Fixed download link (works in the Downloader app on the TV/tablet):
 #   https://github.com/qatar4u/qatar4u-tv/releases/latest/download/qatar4u-tv.apk
 name: Build and release APK
 
 on:
   push:
-    branches: [main]
-    paths-ignore: ["**.md", "docs/**", "rollback/**"]
+    branches: ["**"]
+  pull_request:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish a new release after device testing and review"
+        type: boolean
+        default: false
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: release-apk
+  group: validate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -34,7 +39,7 @@ jobs:
         run: |
           echo "ANDROID_HOME=$ANDROID_HOME"
           test -d "$ANDROID_HOME/platforms"
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-34" "build-tools;34.0.0" > /dev/null || true
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-34" "build-tools;34.0.0" > /dev/null
 
       - id: gradle
         uses: gradle/actions/setup-gradle@v4
@@ -50,27 +55,64 @@ jobs:
         run: |
           chmod +x gradlew
           set -o pipefail
-          ./gradlew --no-daemon --stacktrace assembleRelease 2>&1 | tee build.log
+          ./gradlew --no-daemon --stacktrace testDebugUnitTest lintDebug assembleRelease 2>&1 | tee build.log
           cp app/build/outputs/apk/release/app-release.apk qatar4u-tv.apk
 
-      - name: Read version
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-reports-${{ github.run_id }}
+          path: |
+            app/build/reports/
+            app/build/test-results/
+            build.log
+          if-no-files-found: warn
+
+      - name: Upload candidate APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Qatar4u-TV-candidate-${{ github.run_id }}
+          path: qatar4u-tv.apk
+          retention-days: 30
+
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: Qatar4u-TV-candidate-${{ github.run_id }}
+
+      - name: Read version and require an unused tag
         id: ver
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           v=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
+          test -n "$v"
+          if git ls-remote --exit-code --tags origin "refs/tags/v${v}"; then
+            echo "::error::Tag v${v} already exists. Increment the version before publishing."
+            exit 1
+          else
+            status=$?
+            # Exit 2 means no matching ref. A network failure must not be treated as a new version.
+            test "$status" -eq 2
+          fi
           echo "tag=v${v}" >> "$GITHUB_OUTPUT"
           echo "name=Qatar4u TV ${v}" >> "$GITHUB_OUTPUT"
-          # Release post from .github/RELEASE_NOTES.md, with this version's tag in the version link.
           sed "s#{{TAG}}#v${v}#g" .github/RELEASE_NOTES.md > release-notes.md
 
-      # One post only: remove every earlier release and its tag before publishing the new one.
-      - name: Remove earlier releases
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
-        run: |
-          gh release list -R "$GITHUB_REPOSITORY" --limit 100 --json tagName -q '.[].tagName' |
-            while read -r t; do gh release delete "$t" -R "$GITHUB_REPOSITORY" --yes --cleanup-tag; done
-
-      - name: Publish release
+      - name: Publish reviewed release (keep previous releases)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.ver.outputs.tag }}
@@ -79,19 +121,4 @@ jobs:
           make_latest: "true"
           files: qatar4u-tv.apk
           body_path: release-notes.md
-          # With the owner's token the release is published as qatar4u, not github-actions.
-          token: ${{ secrets.RELEASE_TOKEN || github.token }}
-
-      # The run log isn't reachable from outside GitHub, so put the failure in an annotation.
-      - name: Report failure
-        if: failure()
-        run: |
-          echo "steps: java=${{ steps.java.outcome }} sdk=${{ steps.sdk.outcome }} gradle=${{ steps.gradle.outcome }} build=${{ steps.build.outcome }}"
-          if [ -f build.log ]; then
-            msg=$(grep -E "^e: |error:|FAILURE|What went wrong|> |Execution failed|Could not" build.log | head -40)
-            [ -z "$msg" ] && msg=$(tail -40 build.log)
-          else
-            msg="build step did not run (java=${{ steps.java.outcome }} sdk=${{ steps.sdk.outcome }} gradle=${{ steps.gradle.outcome }})"
-          fi
-          msg="${msg//'%'/'%25'}"; msg="${msg//$'\n'/'%0A'}"; msg="${msg//$'\r'/}"
-          echo "::error title=Build failed::$msg"
+          token: ${{ github.token }}

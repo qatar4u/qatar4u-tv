@@ -82,4 +82,19 @@ class PrayerTimesTest {
         assertEquals("18:33", PrayerTimes.clock(min(18, 33), use24h = true))
         assertEquals("04:05", PrayerTimes.clock(min(4, 5), use24h = true))
     }
+    @Test
+    fun gulfCitiesStayOrderedAcrossYearAndDayBoundaries() {
+        val cities = listOf(25.2854 to 51.5310, 21.4225 to 39.8262, 24.7136 to 46.6753)
+        val dates = listOf(LocalDate.of(2026, 12, 31), LocalDate.of(2027, 1, 1),
+            LocalDate.of(2027, 3, 20), LocalDate.of(2027, 6, 21), LocalDate.of(2027, 12, 21))
+        for ((lat, lon) in cities) for (date in dates) {
+            val t = PrayerTimes.minutes(date, lat, lon, qatar, ramadan = false)
+            val tomorrow = PrayerTimes.minutes(date.plusDays(1), lat, lon, qatar, ramadan = false)
+            for (i in 1..5) assertTrue("$date at $lat,$lon", t[i] > t[i - 1])
+            assertTrue(t.all { it in 0 until 1440 })
+            assertEquals(tomorrow[0] + 1, PrayerTimes.minutesUntilNext(t, 1439, tomorrow[0]))
+            assertEquals(PrayerTimes.DHUHR, PrayerTimes.next(t, t[PrayerTimes.FAJR]))
+        }
+    }
+
 }

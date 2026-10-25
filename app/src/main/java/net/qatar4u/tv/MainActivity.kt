@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -48,6 +46,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import net.qatar4u.tv.location.CurrentLocation
 import net.qatar4u.tv.data.AppSettings
 import net.qatar4u.tv.ui.HomeScreen
 import net.qatar4u.tv.ui.PinPad
@@ -72,6 +71,7 @@ class MainActivity : ComponentActivity() {
     private val libraryAllowed = mutableStateOf(false)
     private val wallpaperVersion = mutableStateOf(0)
     private val homePressed = mutableStateOf(0)
+    private var locationPending = false
     private var vm: MainViewModel? = null
 
     override fun attachBaseContext(newBase: Context) {
@@ -236,16 +236,24 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("MissingPermission")
     private fun applyLocation() {
-        val lm = getSystemService(LOCATION_SERVICE) as LocationManager
-        val best: Location? = lm.getProviders(true).mapNotNull { runCatching { lm.getLastKnownLocation(it) }.getOrNull() }
-            .maxByOrNull { it.time }
-        if (best == null) { toast(getString(R.string.location_none)); return }
+        if (locationPending) return
+        locationPending = true
+        toast(getString(R.string.location_searching))
         lifecycleScope.launch {
-            vm?.store?.update {
-                it.copy(cityId = "custom", lat = best.latitude, lon = best.longitude, zoneId = TimeZone.getDefault().id,
-                    customName = getString(R.string.my_location))
+            try {
+                val best = CurrentLocation.find(this@MainActivity)
+                if (best == null) {
+                    toast(getString(R.string.location_none))
+                    return@launch
+                }
+                vm?.store?.update {
+                    it.copy(cityId = "custom", lat = best.latitude, lon = best.longitude,
+                        zoneId = TimeZone.getDefault().id, customName = getString(R.string.my_location))
+                }
+                vm?.refreshWeather()
+            } finally {
+                locationPending = false
             }
-            vm?.refreshWeather()
         }
     }
 

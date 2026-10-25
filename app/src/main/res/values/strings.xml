@@ -107,4 +107,5 @@
     <string name="ok">OK</string>
     <string name="home_default">Make Qatar4u TV the home screen</string>
     <string name="version">Version %1$s</string>
+    <string name="location_searching">Finding your location…</string>
 </resources>
