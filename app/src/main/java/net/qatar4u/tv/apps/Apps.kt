@@ -34,7 +34,6 @@ object Apps {
     val ENTERTAINMENT = listOf(
         Suggested("com.google.android.youtube", "يوتيوب", "YouTube"),
         Suggested("com.netflix.mediaclient", "نتفليكس", "Netflix"),
-        Suggested("net.mbc.shahid", "شاهد", "Shahid"),
         Suggested("com.osn.go", "OSN+", "OSN+"),
         Suggested("com.parsifal.starz", "ستارز بلاي", "STARZPLAY"),
         Suggested("org.videolan.vlc", "VLC", "VLC"),

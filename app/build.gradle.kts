@@ -12,8 +12,8 @@ android {
         applicationId = "net.qatar4u.tv"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.5.0"
+        versionCode = 7
+        versionName = "1.5.1"
     }
 
     signingConfigs {

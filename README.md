@@ -18,7 +18,7 @@ stock Android 8 and later, with no root and no system changes.
   the tablet is offline it shows the last reading with its time, marked as offline. Refreshes about hourly
   in the background and on demand.
 - **Entertainment hub.** Lists only the apps that are actually installed and opens them with their own
-  launch intent. YouTube, Netflix, Shahid, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
+  launch intent. YouTube, Netflix, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
   missing ones open their Google Play page. Favourites, reordering and hiding. A local video library row.
 - **Qatar wallpapers** stored on the tablet: the owner's own photos of Qatar.
   Changes on a schedule you pick, or stays pinned. Add more pictures from the tablet.
