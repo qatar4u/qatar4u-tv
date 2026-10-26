@@ -41,7 +41,7 @@ def click(label, scroll=False):
         bounds = find(label)
         if bounds:
             x1, y1, x2, y2 = bounds
-            adb('shell', 'input', 'tap', str((x1+x2)//2), str((y1+y2)//2))
+            adb('shell', 'input', 'swipe', str((x1+x2)//2), str((y1+y2)//2), str((x1+x2)//2), str((y1+y2)//2), '150')
             time.sleep(1)
             return
         if scroll:
@@ -60,39 +60,26 @@ def capture(name):
 
 
 adb('shell', 'settings', 'put', 'system', 'accelerometer_rotation', '0')
-adb('shell', 'settings', 'put', 'system', 'user_rotation', '1')
-adb('shell', 'wm', 'size', '1080x1920')
+adb('shell', 'settings', 'put', 'system', 'user_rotation', '0')
+adb('shell', 'wm', 'size', '1920x1080')
 adb('shell', 'wm', 'density', '240')
 adb('shell', 'am', 'start', '-n', 'net.qatar4u.tv/.MainActivity')
 time.sleep(5)
 capture('home')
 click(LABEL['settings'])
-# Move from the content pane into the RTL navigation column before using Down.
-adb('shell', 'input', 'keyevent', '22')
-adb('shell', 'input', 'keyevent', '22')
-time.sleep(1)
-# Settings initially focuses General. Navigate exactly as a physical D-pad remote does.
-def down(count):
-    for _ in range(count):
-        adb('shell', 'input', 'keyevent', '20')
-        time.sleep(0.4)
-    time.sleep(1)
-
-
 def record(name):
     capture(name)
     adb('shell', 'uiautomator', 'dump', '/sdcard/q4u-window.xml')
     adb('pull', '/sdcard/q4u-window.xml', str(OUT / f'{name}.xml'))
 
-
-down(6)  # General -> Appearance
+click(LABEL['s_look'], scroll=True)
 record('appearance')
-down(6)  # Appearance -> Download apps
+click(LABEL['s_downloads'], scroll=True)
 record('downloader')
-print('Downloader controls visible:', bool(find(LABEL['keypad_clear']) and find(LABEL['keypad_confirm'])), flush=True)
-down(1)  # Download apps -> PIN
+assert find(LABEL['keypad_clear']) and find(LABEL['keypad_confirm']), 'Downloader keypad missing'
+click(LABEL['s_security'], scroll=True)
 record('pin-keypad')
-print('PIN controls visible:', bool(find(LABEL['keypad_clear']) and find(LABEL['keypad_confirm'])), flush=True)
-down(1)  # PIN -> About
+assert find(LABEL['keypad_clear']) and find(LABEL['keypad_confirm']), 'PIN keypad missing'
+click(LABEL['s_about'], scroll=True)
 record('about')
-print('Publisher visible:', bool(find('Qatar4u')), flush=True)
+assert find('Qatar4u'), 'Canonical publisher name missing'
