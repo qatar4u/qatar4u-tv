@@ -1,5 +1,7 @@
 # Qatar4u TV
 
+**Publisher: Qatar4u**
+
 A home screen for the Samsung Galaxy Tab S6 (SM-T865) that turns it into a living-room entertainment hub:
 large gold-framed cards you can drive with a Bluetooth remote, prayer times calculated on the tablet,
 weather from Open-Meteo, Qatar landmark wallpapers and the streaming apps you already have. It runs on

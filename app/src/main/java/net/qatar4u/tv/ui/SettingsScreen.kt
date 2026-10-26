@@ -419,6 +419,8 @@ fun PinPad(entry: String, onDigit: (String) -> Unit, onClear: () -> Unit, onOk: 
 private fun About() {
     val context = LocalContext.current
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Label(stringResource(R.string.publisher_label))
+        Text(stringResource(R.string.publisher_name), style = MaterialTheme.typography.titleLarge, color = LocalAccent.current)
         Note(stringResource(R.string.version, BuildConfigInfo.versionName(context)))
         Note("${Build.MANUFACTURER} ${Build.MODEL} · Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
         Note("${Build.DISPLAY} · ${Build.VERSION.SECURITY_PATCH}")

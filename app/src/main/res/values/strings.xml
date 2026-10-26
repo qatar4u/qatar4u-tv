@@ -143,4 +143,6 @@
     <string name="download_failure_reason">Android download error: %1$d. Check storage and connection, or resolve the link again.</string>
     <string name="keypad_clear">Clear</string>
     <string name="keypad_confirm">Confirm</string>
+    <string name="publisher_name" translatable="false">Qatar4u</string>
+    <string name="publisher_label">Publisher</string>
 </resources>

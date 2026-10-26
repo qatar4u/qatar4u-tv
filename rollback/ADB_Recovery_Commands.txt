@@ -2,7 +2,8 @@
 # Run from the platform-tools folder after: adb devices (the tablet must show "device").
 # Read Restore_Instructions.md first. Run one line at a time.
 
-# 1. Samsung's own home screen back
+# 1. Samsung's own home screen back (One UI Home was disabled on 26 Oct 2026)
+adb shell pm enable com.sec.android.app.launcher
 adb shell cmd package set-home-activity com.sec.android.app.launcher/.activities.LauncherActivity
 adb shell input keyevent KEYCODE_HOME
 

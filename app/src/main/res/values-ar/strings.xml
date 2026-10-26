@@ -140,4 +140,5 @@
     <string name="download_failure_reason">رمز خطأ التنزيل في أندرويد: %1$d. تحقق من المساحة والاتصال أو اجلب الرابط مجددًا.</string>
     <string name="keypad_clear">مسح</string>
     <string name="keypad_confirm">تأكيد</string>
+    <string name="publisher_label">الناشر</string>
 </resources>

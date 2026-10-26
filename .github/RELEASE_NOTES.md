@@ -1,38 +1,25 @@
-## روابط التحميل
+# Qatar4u TV 1.5.3
 
-**آخر نسخة دائمًا** (يُستخدم في تطبيق Downloader، ويتحدّث تلقائيًا مع كل إصدار جديد):
-https://github.com/qatar4u/qatar4u-tv/releases/latest/download/qatar4u-tv.apk
+**الناشر / Publisher: Qatar4u**
 
-**رابط النسخة 1.3.0** (للتثبيت عبر فلاشة USB أو للمشاركة باسم النسخة):
-https://github.com/qatar4u/qatar4u-tv/releases/download/{{TAG}}/qatar4u-tv.apk
+## الجديد
 
-## الجديد في 1.3.0
+- لوحة أرقام موحدة وكبيرة في التنزيلات ورمز القفل: 123 / 456 / 789، وأسفلها مسح — 0 — تأكيد، باتجاه ثابت بالعربية والإنجليزية.
+- إضافة TikTok إلى اقتراحات التطبيقات، وإزالة Shahid من الاقتراحات.
+- التحكم بشفافية خلفيات بطاقات التطبيقات من الإعدادات، مع معاينة وحفظ القيمة.
+- إدخال كود Downloader أو رابط APK، وعرض الوجهة وتقدم التنزيل والإلغاء، ثم فتح مثبّت أندرويد بموافقتك.
+- تحسين تحويل الروابط ورسائل الأخطاء ودعم HTTP وHTTPS. يُميّز رابط HTTP بأنه غير مشفّر.
+- تحسين استخدام الموقع: رفض القراءات القديمة وطلب قراءة حديثة عند الحاجة.
+- الحفاظ على مواقيت الصلاة دون إنترنت، والطقس من Open-Meteo، والعربية والإنجليزية.
 
-- **يعمل من أندرويد 8** بدل أندرويد 10. صار يثبت على أجهزة Fire TV القديمة (Fire OS 7) وعلى شاشات السيارات التي تعمل بأندرويد 8 و9.
-- **الشاشات العمودية:** في الشاشات الضيقة مثل شاشة BYD الدوّارة، تنزل بطاقة الطقس تحت الساعة وتظهر أوقات الصلاة في صفين بدل صف طويل.
-- **الأجهزة التي ليس فيها متجر Google Play** (أغلب شاشات السيارات): يختفي صف التطبيقات المقترحة.
+## التحميل
 
-## ما أُضيف قبلها (1.1 و 1.2)
+[تحميل APK لهذا الإصدار](https://github.com/qatar4u/qatar4u-tv/releases/download/{{TAG}}/qatar4u-tv.apk)
 
-- أيقونة جديدة: ميدالية ذهبية على خلفية عنابية، فيها تسنين علم قطر التسعة وزر تشغيل. وصورة التطبيق على التلفزيون بنفس التصميم.
-- الضغط المطوّل على أي أيقونة يعطيك "احذف التطبيق"، ويطلب الجهاز التأكيد قبل الحذف.
-- "انقله إلى الترفيه" و"أخرجه من الترفيه" من نفس القائمة، لأي تطبيق مثبت. وتطبيقات الفيديو تنتقل لصف الترفيه تلقائيًا.
-- الخلفيات صارت صور قطر الحقيقية الخمس فقط.
-- حُذف Disney+ من التطبيقات المقترحة لأنه غير متوفر في قطر.
+[تحميل أحدث إصدار دائمًا](https://github.com/qatar4u/qatar4u-tv/releases/latest/download/qatar4u-tv.apk)
 
-## ملاحظات التثبيت
+فك ضغط ملفات الاختبار إن لزم، وثبّت APK كتحديث فوق التطبيق الحالي. تثبيت التطبيقات التي يتم تنزيلها يحتاج موافقة أندرويد. بعض التطبيقات لا تدعم التنقل الكامل بالريموت، ويُختبر DeX والصوت عبر HDMI على الجهاز الفعلي. صور المشروع ملتقطة من محاكي Android وليست من تابلت المستخدم.
 
-- من نسخة 1.1 وما بعدها، كل تحديث يتثبت فوق القديم بدون حذف. إذا كانت عندك نسخة بُنيت على الكمبيوتر قبل ذلك، احذفها مرة واحدة ثم ثبّت.
-- لا يعمل على تلفزيونات Samsung (Tizen) وLG (webOS) وHisense (VIDAA) وRoku وApple TV لأنها ليست أندرويد. يلزمها جهاز أندرويد بوكس.
-- كثير من شاشات السيارات الأصلية تمنع تثبيت تطبيقات من خارجها. هذا قرار نظام السيارة وليس التطبيق.
+## English
 
----
-
-### English
-
-**Always the latest:** https://github.com/qatar4u/qatar4u-tv/releases/latest/download/qatar4u-tv.apk
-**This exact version (1.3.0):** https://github.com/qatar4u/qatar4u-tv/releases/download/{{TAG}}/qatar4u-tv.apk
-
-**1.3.0:** runs from Android 8 (was 10), so older Fire TV sticks and Android 8/9 car head units can install it. On screens under 640 dp wide the weather card moves under the clock and prayer times wrap to two rows. The suggested-apps row hides when Google Play isn't installed.
-
-**Earlier (1.1, 1.2):** new gold-and-maroon icon and TV banner; Uninstall and Move to/Remove from Entertainment in the long-press menu, with video apps joining Entertainment automatically; wallpapers are the owner's five real photos of Qatar; Disney+ dropped from suggestions.
+Published by **Qatar4u**. Shared large phone-style keypad in Downloader and PIN screens; TikTok recommendations; app-card background transparency; Downloader short codes and HTTP/HTTPS APK downloads with explicit Android installation consent; improved location freshness and download diagnostics. Previous releases are preserved. Install over the existing app. Screenshots are captured from an Android emulator; remote, DeX and HDMI compatibility need device testing.
