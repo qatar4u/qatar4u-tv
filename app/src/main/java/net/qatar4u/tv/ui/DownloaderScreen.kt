@@ -5,16 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,10 +20,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -96,30 +91,15 @@ fun DownloaderScreen(onToast: (String) -> Unit) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
             textStyle = MaterialTheme.typography.titleLarge.copy(textDirection = TextDirection.Ltr, textAlign = TextAlign.Left),
         )
-        // Keep the keypad in numeric order even when the surrounding interface is Arabic RTL.
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                for (row in listOf(listOf("1", "2", "3", "4", "5"), listOf("6", "7", "8", "9", "0"))) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        for (key in row) FocusCard(Modifier.weight(1f).height(64.dp), onClick = {
-                            if (input.length < 12) input += key
-                            target = null; error = null
-                        }) {
-                            Text(key, style = MaterialTheme.typography.headlineMedium, color = Q4u.TextPrimary)
-                        }
-                    }
-                }
-            }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            FocusButton(stringResource(R.string.download_backspace), onClick = {
-                input = input.dropLast(1); target = null; error = null
-            })
-            FocusButton(stringResource(R.string.download_clear), onClick = {
-                input = ""; target = null; error = null
-            })
-        }
-        FocusButton(stringResource(if (resolving) R.string.download_resolving else R.string.download_resolve), onClick = { resolve() })
+        NumericKeypad(
+            onDigit = { key ->
+                if (input.length < 12) input += key
+                target = null; error = null
+            },
+            onClear = { input = ""; target = null; error = null },
+            onConfirm = { resolve() },
+        )
+        if (resolving) Text(stringResource(R.string.download_resolving), color = Q4u.TextSecondary)
         error?.let { reason ->
             Text(stringResource(when (reason) {
                 ResolveFailure.INPUT -> R.string.download_invalid_input

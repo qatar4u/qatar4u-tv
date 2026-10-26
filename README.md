@@ -18,7 +18,7 @@ stock Android 8 and later, with no root and no system changes.
   the tablet is offline it shows the last reading with its time, marked as offline. Refreshes about hourly
   in the background and on demand.
 - **Entertainment hub.** Lists only the apps that are actually installed and opens them with their own
-  launch intent. YouTube, Netflix, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
+  launch intent. YouTube, TikTok, Netflix, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
   missing ones open their Google Play page. Favourites, reordering and hiding. A local video library row.
 - **Qatar wallpapers** stored on the tablet: the owner's own photos of Qatar.
   Changes on a schedule you pick, or stays pinned. Add more pictures from the tablet.
@@ -80,3 +80,7 @@ Validation: unit tests cover input normalization, the manual redirect parser and
 The keypad uses two fixed left-to-right rows of large digits, with separate delete/clear controls. APK classification also checks Content-Disposition and treats HTML as a webpage even when its URL ends in .apk. Resolver and DownloadManager share a User-Agent. HTTP links are supported (with an unencrypted-transfer label); the manifest permits cleartext transfers for this feature, while weather continues to use HTTPS. Errors distinguish invalid codes, missing files, blocked requests, redirects and connectivity; failed Android downloads show the platform reason code.
 
 Resolver regression tests exercise the complete code → manual link → relative HTTP redirect → APK response chain with deterministic transport fixtures. Live server/download checks are recorded in the PR; these are not a substitute for testing DownloadManager, installer permissions and the keypad on the tablet.
+
+### Keypad and TikTok (1.5.3 candidate)
+
+Downloader and PIN entry use the same large 64 dp keypad: fixed visual order 123 / 456 / 789 / Clear 0 Confirm, including in Arabic. Clear empties the entry; Confirm resolves a Downloader code or submits a PIN. PIN digits stay masked. TikTok is included in app recommendations, opening the installed app or its official Google Play listing.

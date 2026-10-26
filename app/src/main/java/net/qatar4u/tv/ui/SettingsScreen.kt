@@ -407,22 +407,11 @@ private fun Security(s: AppSettings, onChange: ((AppSettings) -> AppSettings) ->
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PinPad(entry: String, onDigit: (String) -> Unit, onClear: () -> Unit, onOk: () -> Unit, firstFocus: FocusRequester? = null) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("●".repeat(entry.length) + "○".repeat(4 - entry.length), style = MaterialTheme.typography.headlineMedium, color = LocalAccent.current)
-        for (row in listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("7", "8", "9"), listOf("⌫", "0", "✓"))) {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                row.forEach { k ->
-                    FocusButton(
-                        k,
-                        Modifier.width(76.dp).then(if (k == "1" && firstFocus != null) Modifier.focusRequester(firstFocus) else Modifier),
-                        onClick = { when (k) { "⌫" -> onClear(); "✓" -> onOk(); else -> onDigit(k) } },
-                    )
-                }
-            }
-        }
+        NumericKeypad(onDigit = onDigit, onClear = onClear, onConfirm = onOk, firstFocus = firstFocus)
     }
 }
 

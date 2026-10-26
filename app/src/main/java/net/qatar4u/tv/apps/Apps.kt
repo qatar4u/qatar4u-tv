@@ -33,6 +33,7 @@ object Apps {
     /** The entertainment apps the hub knows, in their default order. */
     val ENTERTAINMENT = listOf(
         Suggested("com.google.android.youtube", "يوتيوب", "YouTube"),
+        Suggested("com.zhiliaoapp.musically", "تيك توك", "TikTok"),
         Suggested("com.netflix.mediaclient", "نتفليكس", "Netflix"),
         Suggested("com.osn.go", "OSN+", "OSN+"),
         Suggested("com.parsifal.starz", "ستارز بلاي", "STARZPLAY"),

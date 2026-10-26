@@ -141,4 +141,6 @@
     <string name="download_network_error">Could not connect to the server. Check the connection and try again.</string>
     <string name="download_http">HTTP link: the transfer is not encrypted.</string>
     <string name="download_failure_reason">Android download error: %1$d. Check storage and connection, or resolve the link again.</string>
+    <string name="keypad_clear">Clear</string>
+    <string name="keypad_confirm">Confirm</string>
 </resources>

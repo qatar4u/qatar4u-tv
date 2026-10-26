@@ -138,4 +138,6 @@
     <string name="download_network_error">تعذّر الاتصال بالخادم. تحقق من الاتصال وأعد المحاولة.</string>
     <string name="download_http">رابط HTTP: نقل الملف غير مشفّر.</string>
     <string name="download_failure_reason">رمز خطأ التنزيل في أندرويد: %1$d. تحقق من المساحة والاتصال أو اجلب الرابط مجددًا.</string>
+    <string name="keypad_clear">مسح</string>
+    <string name="keypad_confirm">تأكيد</string>
 </resources>
