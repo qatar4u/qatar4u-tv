@@ -86,3 +86,7 @@ Resolver regression tests exercise the complete code → manual link → relativ
 ### Keypad and TikTok (1.5.3 candidate)
 
 Downloader and PIN entry use the same large 64 dp keypad: fixed visual order 123 / 456 / 789 / Clear 0 Confirm, including in Arabic. Clear empties the entry; Confirm resolves a Downloader code or submits a PIN. PIN digits stay masked. TikTok is included in app recommendations, opening the installed app or its official Google Play listing.
+
+## Device testing
+
+Successfully tested on **HUAWEI Mate X6**, as reported by the project owner. This records the owner's device experience; it does not imply that every feature or other device has been verified.

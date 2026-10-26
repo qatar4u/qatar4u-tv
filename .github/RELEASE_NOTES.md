@@ -23,3 +23,9 @@
 ## English
 
 Published by **Qatar4u**. Shared large phone-style keypad in Downloader and PIN screens; TikTok recommendations; app-card background transparency; Downloader short codes and HTTP/HTTPS APK downloads with explicit Android installation consent; improved location freshness and download diagnostics. Previous releases are preserved. Install over the existing app. Screenshots are captured from an Android emulator; remote, DeX and HDMI compatibility need device testing.
+
+## تجربة على جهاز فعلي / Physical-device testing
+
+تمت تجربة المشروع بنجاح على هاتف **HUAWEI Mate X6**، بحسب إفادة مالك المشروع.
+
+Successfully tested on **HUAWEI Mate X6**, as reported by the project owner.
