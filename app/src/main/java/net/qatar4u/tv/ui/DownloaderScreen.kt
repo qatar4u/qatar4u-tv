@@ -54,12 +54,14 @@ fun DownloaderScreen(onToast: (String) -> Unit) {
 
     fun resolve() {
         if (resolving || input.isBlank()) return
+        val requestedInput = input
         resolving = true
         error = false
         target = null
         scope.launch {
             try {
-                target = withTimeout(30_000L) { CodeResolver.resolve(input) }
+                val resolved = withTimeout(30_000L) { CodeResolver.resolve(requestedInput) }
+                if (input == requestedInput) target = resolved
             } catch (_: TimeoutCancellationException) { error = true
             } catch (e: CancellationException) { throw e
             } catch (_: Exception) { error = true
