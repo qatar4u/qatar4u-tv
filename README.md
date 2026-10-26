@@ -90,3 +90,17 @@ Downloader and PIN entry use the same large 64 dp keypad: fixed visual order 123
 ## Device testing
 
 Successfully tested on **HUAWEI Mate X6**, as reported by the project owner. This records the owner's device experience; it does not imply that every feature or other device has been verified.
+
+## Download version 1.5.3
+
+**Publisher: Qatar4u**
+
+[Download APK from GitHub](https://github.com/qatar4u/qatar4u-tv/raw/refs/heads/main/downloads/qatar4u-tv.apk) · [SHA256 checksum](downloads/SHA256SUMS)
+
+Download and open the APK on Android. Allow installation from the download source if requested, then confirm. Install over the previous version; the established signing key is retained. Do not remove existing app data to work around a signature mismatch.
+
+Changes: shared phone-style Downloader/PIN keypad (123 / 456 / 789 / Clear 0 Confirm), saved app-card background transparency, Downloader codes and APK links with progress, location freshness and download diagnostics, TikTok suggestions, and removal of Shahid from suggestions. This does not uninstall Shahid.
+
+Successfully tested on **HUAWEI Mate X6**, as reported by the owner; this is not an exhaustive feature certification.
+
+The direct link becomes available when the distribution job completes. GitHub Releases may still show 1.3.0 until the owner's RELEASE_TOKEN is configured.

@@ -176,3 +176,32 @@ jobs:
           files: qatar4u-tv.apk
           body_path: release-notes.md
           token: ${{ secrets.RELEASE_TOKEN }}
+
+  distribute:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && contains(github.event.head_commit.message, '[release]')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: Qatar4u-TV-candidate-${{ github.run_id }}
+          path: candidate
+      - name: Publish the validated APK and checksum
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA" || { echo "Main changed; refusing to publish a stale APK."; exit 1; }
+          mkdir -p downloads
+          cp candidate/qatar4u-tv.apk downloads/qatar4u-tv.apk
+          (cd downloads && sha256sum qatar4u-tv.apk > SHA256SUMS)
+          git config user.name Qatar4u
+          git config user.email 79297446+qatar4u@users.noreply.github.com
+          git add downloads/qatar4u-tv.apk downloads/SHA256SUMS
+          git commit -m "Publish validated Qatar4u TV APK [skip ci]"
+          git push origin HEAD:main
