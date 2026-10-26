@@ -67,15 +67,28 @@ adb('shell', 'am', 'start', '-n', 'net.qatar4u.tv/.MainActivity')
 time.sleep(5)
 capture('home')
 click(LABEL['settings'])
-click(LABEL['s_look'], scroll=True)
-assert find(LABEL['card_reset']), 'Appearance controls did not render'
-capture('appearance')
-click(LABEL['s_downloads'], scroll=True)
+# Settings initially focuses General. Navigate exactly as a physical D-pad remote does.
+def down(count):
+    for _ in range(count):
+        adb('shell', 'input', 'keyevent', '20')
+        time.sleep(0.4)
+    time.sleep(1)
+
+
+def record(name):
+    capture(name)
+    adb('shell', 'uiautomator', 'dump', '/sdcard/q4u-window.xml')
+    adb('pull', '/sdcard/q4u-window.xml', str(OUT / f'{name}.xml'))
+
+
+down(6)  # General -> Appearance
+record('appearance')
+down(6)  # Appearance -> Download apps
+record('downloader')
 assert find(LABEL['keypad_clear']) and find(LABEL['keypad_confirm']), 'Downloader keypad missing'
-capture('downloader')
-click(LABEL['s_security'], scroll=True)
+down(1)  # Download apps -> PIN
+record('pin-keypad')
 assert find(LABEL['keypad_clear']) and find(LABEL['keypad_confirm']), 'PIN keypad missing'
-capture('pin-keypad')
-click(LABEL['s_about'], scroll=True)
+down(1)  # PIN -> About
+record('about')
 assert find('Qatar4u'), 'Canonical publisher name missing'
-capture('about')
