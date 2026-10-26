@@ -65,12 +65,18 @@ asked for only when you tap "Use my location" and stays on the tablet. No analyt
 Weather data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0). Cairo font, SIL Open Font
 License (`licenses/Cairo-OFL.txt`). Wallpaper photos supplied by the owner, who holds the rights to them.
 
-## Downloader codes (1.5.0 candidate)
+## Downloader codes (1.5.2 candidate)
 
-Settings > Download apps accepts AFTVnews numeric Downloader codes (including Arabic digits) and direct HTTPS APK URLs. Use the remote keypad or type/paste a link, show the destination, then explicitly download. Progress, cancellation/deletion and reopening the last download are supported across app restarts. Only one download is managed at a time; starting another removes the previous completed/failed file.
+Settings > Download apps accepts AFTVnews numeric Downloader codes (including Arabic digits) and direct HTTP/HTTPS APK URLs. Use the remote keypad or type/paste a link, show the destination, then explicitly download. Progress, cancellation/deletion and reopening the last download are supported across app restarts. Only one download is managed at a time; starting another removes the previous completed/failed file.
 
-Codes are URL shortcuts: host your APK first and generate a code at https://go.aftvnews.com/. This app does not upload files or generate AFTVnews codes. Pages requiring JavaScript, login or extra clicks open in an external browser; HTTP-only destinations are not supported. Resolution depends on the public shortener page and may need updating if its format changes.
+Codes are URL shortcuts: host your APK first and generate a code at https://go.aftvnews.com/. This app does not upload files or generate AFTVnews codes. Pages requiring JavaScript, login or extra clicks open in an external browser; HTTP destinations are supported and labeled as unencrypted before download. Resolution depends on the public shortener page and may need updating if its format changes.
 
 Install APK validates the package archive and opens Android's installer. If prompted, allow installation from Qatar4u TV, return, and press Install APK again. Every install requires Android confirmation. Split APK bundles (APKS/XAPK), silent installation and automatic updating are not supported.
 
 Validation: unit tests cover input normalization, the manual redirect parser and rejection of unsupported schemes/credentials. Before publishing, test a known developer-hosted APK code on Android 10, including consent, denied permission, completion, cancellation, offline/reconnection and process recreation. No arbitrary third-party app was installed during development.
+
+### Downloader fixes in 1.5.2
+
+The keypad uses two fixed left-to-right rows of large digits, with separate delete/clear controls. APK classification also checks Content-Disposition and treats HTML as a webpage even when its URL ends in .apk. Resolver and DownloadManager share a User-Agent. HTTP links are supported (with an unencrypted-transfer label); the manifest permits cleartext transfers for this feature, while weather continues to use HTTPS. Errors distinguish invalid codes, missing files, blocked requests, redirects and connectivity; failed Android downloads show the platform reason code.
+
+Resolver regression tests exercise the complete code → manual link → relative HTTP redirect → APK response chain with deterministic transport fixtures. Live server/download checks are recorded in the PR; these are not a substitute for testing DownloadManager, installer permissions and the keypad on the tablet.

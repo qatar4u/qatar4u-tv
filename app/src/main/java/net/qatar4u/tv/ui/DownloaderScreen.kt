@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +23,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,8 +40,11 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withContext
 import net.qatar4u.tv.R
 import net.qatar4u.tv.download.ApkDownloads
+import net.qatar4u.tv.download.CodeLinks
 import net.qatar4u.tv.download.CodeResolver
 import net.qatar4u.tv.download.DownloadTarget
+import net.qatar4u.tv.download.ResolveException
+import net.qatar4u.tv.download.ResolveFailure
 
 @Composable
 fun DownloaderScreen(onToast: (String) -> Unit) {
@@ -44,7 +53,7 @@ fun DownloaderScreen(onToast: (String) -> Unit) {
     var input by rememberSaveable { mutableStateOf("") }
     var resolving by remember { mutableStateOf(false) }
     var starting by remember { mutableStateOf(false) }
-    var error by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<ResolveFailure?>(null) }
     var target by remember { mutableStateOf<DownloadTarget?>(null) }
     var download by remember { mutableStateOf<ApkDownloads.Snapshot?>(null) }
     val failure = stringResource(R.string.download_error)
@@ -56,15 +65,16 @@ fun DownloaderScreen(onToast: (String) -> Unit) {
         if (resolving || input.isBlank()) return
         val requestedInput = input
         resolving = true
-        error = false
+        error = null
         target = null
         scope.launch {
             try {
                 val resolved = withTimeout(30_000L) { CodeResolver.resolve(requestedInput) }
                 if (input == requestedInput) target = resolved
-            } catch (_: TimeoutCancellationException) { error = true
+            } catch (_: TimeoutCancellationException) { error = ResolveFailure.NETWORK
             } catch (e: CancellationException) { throw e
-            } catch (_: Exception) { error = true
+            } catch (e: ResolveException) { error = e.reason
+            } catch (_: Exception) { error = ResolveFailure.NETWORK
             } finally { resolving = false }
         }
     }
@@ -80,27 +90,52 @@ fun DownloaderScreen(onToast: (String) -> Unit) {
         Text(stringResource(R.string.download_help), color = Q4u.TextSecondary)
         OutlinedTextField(
             value = input,
-            onValueChange = { input = it.take(2048); target = null; error = false },
+            onValueChange = { input = it.take(2048); target = null; error = null },
             label = { Text(stringResource(R.string.download_input)) },
             modifier = Modifier.fillMaxWidth(), singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+            textStyle = MaterialTheme.typography.titleLarge.copy(textDirection = TextDirection.Ltr, textAlign = TextAlign.Left),
         )
-        // TV users can enter the complete numeric code without an on-screen keyboard.
-        for (row in listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("7", "8", "9"), listOf("⌫", "0", "✓"))) {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                for (key in row) FocusButton(key, Modifier.width(72.dp), onClick = {
-                    when (key) {
-                        "⌫" -> { input = input.dropLast(1); target = null }
-                        "✓" -> resolve()
-                        else -> { if (input.length < 12) input += key; target = null }
+        // Keep the keypad in numeric order even when the surrounding interface is Arabic RTL.
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                for (row in listOf(listOf("1", "2", "3", "4", "5"), listOf("6", "7", "8", "9", "0"))) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        for (key in row) FocusCard(Modifier.weight(1f).height(64.dp), onClick = {
+                            if (input.length < 12) input += key
+                            target = null; error = null
+                        }) {
+                            Text(key, style = MaterialTheme.typography.headlineMedium, color = Q4u.TextPrimary)
+                        }
                     }
-                })
+                }
             }
         }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            FocusButton(stringResource(R.string.download_backspace), onClick = {
+                input = input.dropLast(1); target = null; error = null
+            })
+            FocusButton(stringResource(R.string.download_clear), onClick = {
+                input = ""; target = null; error = null
+            })
+        }
         FocusButton(stringResource(if (resolving) R.string.download_resolving else R.string.download_resolve), onClick = { resolve() })
-        if (error) Text(failure, color = Q4u.Danger)
+        error?.let { reason ->
+            Text(stringResource(when (reason) {
+                ResolveFailure.INPUT -> R.string.download_invalid_input
+                ResolveFailure.BLOCKED -> R.string.download_blocked
+                ResolveFailure.NOT_FOUND -> R.string.download_not_found
+                ResolveFailure.REDIRECT -> R.string.download_redirect_error
+                ResolveFailure.NETWORK -> R.string.download_network_error
+            }), color = Q4u.Danger)
+            if (reason != ResolveFailure.INPUT) FocusButton(stringResource(R.string.download_open_page), onClick = {
+                runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(CodeLinks.inputUrl(input)))) }
+                    .onFailure { onToast(failure) }
+            })
+        }
         target?.let { resolved ->
-            Text(resolved.url, color = Q4u.TextPrimary)
+            Text(resolved.url, color = Q4u.TextPrimary, style = MaterialTheme.typography.bodyMedium.copy(textDirection = TextDirection.Ltr))
+            if (resolved.url.startsWith("http:")) Text(stringResource(R.string.download_http), color = LocalAccent.current)
             if (!resolved.apk) {
                 Text(stringResource(R.string.download_webpage), color = Q4u.TextSecondary)
                 FocusButton(stringResource(R.string.download_open_page), onClick = {
@@ -131,6 +166,7 @@ fun DownloaderScreen(onToast: (String) -> Unit) {
                 else -> R.string.download_running
             }
             Text(stringResource(status), color = Q4u.TextPrimary)
+            if (state.status == DownloadManager.STATUS_FAILED) Text(stringResource(R.string.download_failure_reason, state.reason), color = Q4u.Danger)
             if (state.total > 0) {
                 val percent = (state.bytes.toDouble() / state.total * 100).toInt().coerceIn(0, 100)
                 Text("$percent%", color = LocalAccent.current)

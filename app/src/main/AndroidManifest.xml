@@ -5,7 +5,7 @@
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-    <!-- Weather and owner-requested HTTPS code resolution / APK downloads. -->
+    <!-- Weather and owner-requested code resolution / APK downloads. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- Lets the app menu open the system uninstall dialog. -->
@@ -43,6 +43,7 @@
         android:theme="@style/Theme.Q4u"
         android:supportsRtl="true"
         android:allowBackup="false"
+        android:usesCleartextTraffic="true"
         android:resizeableActivity="true"
         tools:targetApi="34">
 

@@ -115,11 +115,11 @@
     <string name="card_transparency_note">0% is opaque; 100% is transparent. App icons, banners and names stay clear. Use the buttons with your remote.</string>
     <string name="card_reset">Reset card background</string>
     <string name="s_downloads">Download apps</string>
-    <string name="download_help">Enter an AFTVnews Downloader code or a direct HTTPS APK link. The code points to a hosted link; it does not upload an app.</string>
-    <string name="download_input">Downloader code or HTTPS link</string>
+    <string name="download_help">Enter an AFTVnews Downloader code or a direct APK link. The code points to a hosted link; it does not upload an app.</string>
+    <string name="download_input">Downloader code or web link</string>
     <string name="download_resolve">Show destination</string>
     <string name="download_resolving">Resolving…</string>
-    <string name="download_error">Could not resolve or download this link. Check the code and connection. Only HTTPS links are supported.</string>
+    <string name="download_error">Could not resolve or download this link. Check the code and connection. Use a full HTTP or HTTPS link.</string>
     <string name="download_webpage">This code opens a web page, not a direct APK. Open the page in your browser to continue.</string>
     <string name="download_open_page">Open page</string>
     <string name="download_start">Download APK</string>
@@ -132,4 +132,13 @@
     <string name="download_install_error">Cannot open the installer. Check that the download is a valid APK and an installer is available.</string>
     <string name="download_cancel">Cancel download</string>
     <string name="download_delete">Delete downloaded file</string>
+    <string name="download_backspace">Delete digit</string>
+    <string name="download_clear">Clear all</string>
+    <string name="download_invalid_input">Enter a numeric Downloader code or a full http:// or https:// link.</string>
+    <string name="download_blocked">The server blocked the request or requires login. Try opening the page in a browser.</string>
+    <string name="download_not_found">Code or file not found, or the code has expired.</string>
+    <string name="download_redirect_error">The link redirects repeatedly or uses an unsupported destination.</string>
+    <string name="download_network_error">Could not connect to the server. Check the connection and try again.</string>
+    <string name="download_http">HTTP link: the transfer is not encrypted.</string>
+    <string name="download_failure_reason">Android download error: %1$d. Check storage and connection, or resolve the link again.</string>
 </resources>

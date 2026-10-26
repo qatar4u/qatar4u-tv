@@ -17,9 +17,14 @@ class CodeLinksTest {
         assertNull(CodeLinks.manualDestination("<script>window.location='https://example.com/app.apk'</script>"))
     }
     @Test fun unsafeAndMalformedInputsAreRejected() {
-        for (input in listOf("", "123x", "javascript:alert(1)", "file:///tmp/a.apk", "http://example.com/a.apk", "https://user:pass@example.com/a.apk", "https:///bad")) {
+        for (input in listOf("", "123x", "javascript:alert(1)", "file:///tmp/a.apk", "https://user:pass@example.com/a.apk", "https:///bad")) {
             assertTrue("must reject $input", runCatching { CodeLinks.inputUrl(input) }.isFailure)
         }
+    }
+    @Test fun acceptsHttpAndAttachmentNamesButNotHtml() {
+        assertEquals("http://example.com/a.apk", CodeLinks.inputUrl("http://example.com/a.apk"))
+        assertTrue(CodeLinks.isApk("https://example.com/download", "application/zip", "attachment; filename=\"app.apk\""))
+        assertFalse(CodeLinks.isApk("https://example.com/app.apk", "text/html", ""))
     }
     @Test fun badManualDestinationCannotBecomeExecutableScript() {
         assertTrue(runCatching { CodeLinks.manualDestination("""<div id="redirect_noscript"><a href="javascript:alert(1)">bad</a></div>""") }.isFailure)

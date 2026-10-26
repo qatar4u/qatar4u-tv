@@ -14,13 +14,14 @@ object ApkDownloads {
     private fun manager(context: Context) = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     private fun prefs(context: Context) = context.getSharedPreferences("apk_download", Context.MODE_PRIVATE)
 
-    data class Snapshot(val id: Long, val status: Int, val bytes: Long, val total: Long)
+    data class Snapshot(val id: Long, val status: Int, val bytes: Long, val total: Long, val reason: Int)
 
     fun start(context: Context, target: DownloadTarget): Long {
         require(target.apk)
         val previous = snapshot(context)
         require(previous?.status !in listOf(DownloadManager.STATUS_PENDING, DownloadManager.STATUS_RUNNING, DownloadManager.STATUS_PAUSED))
-        val request = DownloadManager.Request(Uri.parse(CodeLinks.https(target.url)))
+        val request = DownloadManager.Request(Uri.parse(CodeLinks.webUrl(target.url)))
+            .addRequestHeader("User-Agent", CodeLinks.USER_AGENT)
             .setTitle("Qatar4u TV · APK")
             .setMimeType(MIME)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -38,7 +39,7 @@ object ApkDownloads {
             if (!cursor.moveToFirst()) return null
             fun long(column: String) = cursor.getLong(cursor.getColumnIndexOrThrow(column))
             return Snapshot(id, long(DownloadManager.COLUMN_STATUS).toInt(),
-                long(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR), long(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+                long(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR), long(DownloadManager.COLUMN_TOTAL_SIZE_BYTES), long(DownloadManager.COLUMN_REASON).toInt())
         }
         return null
     }
