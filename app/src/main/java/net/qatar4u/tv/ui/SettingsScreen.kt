@@ -28,10 +28,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -62,6 +64,7 @@ import net.qatar4u.tv.prayer.PrayerMethod
 import net.qatar4u.tv.prayer.PrayerTimes
 import net.qatar4u.tv.util.Dex
 import net.qatar4u.tv.util.Pin
+import kotlin.math.roundToInt
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -69,7 +72,7 @@ enum class Section(val title: Int) {
     GENERAL(R.string.s_general), LOCATION(R.string.s_location), PRAYER(R.string.s_prayer), WEATHER(R.string.s_weather),
     WALLPAPERS(R.string.s_wallpapers), APPS(R.string.s_apps), LOOK(R.string.s_look), SCREENSAVER(R.string.s_screensaver),
     REMOTE(R.string.s_remote), DISPLAY(R.string.s_display), BACKUP(R.string.s_backup), OPTIMIZE(R.string.s_optimize),
-    SECURITY(R.string.s_security), ABOUT(R.string.s_about),
+    DOWNLOADS(R.string.s_downloads), SECURITY(R.string.s_security), ABOUT(R.string.s_about),
 }
 
 /** What the settings screen needs from the activity: pickers and permissions live there. */
@@ -144,6 +147,7 @@ fun SettingsScreen(
                             Section.BACKUP -> Backup(a)
                             Section.OPTIMIZE -> Optimize()
                             Section.SECURITY -> Security(s, onChange, a)
+                            Section.DOWNLOADS -> DownloaderScreen(a.onToast)
                             Section.ABOUT -> About()
                         }
                     }
@@ -284,6 +288,38 @@ private fun Look(s: AppSettings, onChange: ((AppSettings) -> AppSettings) -> Uni
         Choices(Accent.entries.toList(), s.accent, {
             stringResource(when (it) { Accent.GOLD -> R.string.accent_gold; Accent.MAROON -> R.string.accent_maroon; Accent.PEARL -> R.string.accent_pearl })
         }) { v -> onChange { it.copy(accent = v) } }
+        var transparency by remember(s.appCardOpacityPercent) {
+            mutableFloatStateOf((100 - s.appCardOpacityPercent).toFloat())
+        }
+        Label(stringResource(R.string.card_transparency, transparency.roundToInt()))
+        Slider(
+            value = transparency,
+            onValueChange = { transparency = it },
+            onValueChangeFinished = {
+                val opacity = 100 - transparency.roundToInt()
+                onChange { it.copy(appCardOpacityPercent = opacity) }
+            },
+            valueRange = 0f..100f,
+            steps = 19,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            FocusButton(stringResource(R.string.card_less_transparent), onClick = {
+                onChange { it.copy(appCardOpacityPercent = (it.appCardOpacityPercent + 5).coerceAtMost(100)) }
+            })
+            FocusButton(stringResource(R.string.card_more_transparent), onClick = {
+                onChange { it.copy(appCardOpacityPercent = (it.appCardOpacityPercent - 5).coerceAtLeast(0)) }
+            })
+        }
+        // Only the surface uses alpha: labels, icons and the focus outline keep their contrast.
+        FocusCard(
+            Modifier.width(224.dp).height(126.dp),
+            background = Q4u.Surface.copy(alpha = 1f - transparency / 100f),
+            onClick = {},
+        ) { Text(stringResource(R.string.card_preview), color = Q4u.TextPrimary) }
+        Note(stringResource(R.string.card_transparency_note))
+        FocusButton(stringResource(R.string.card_reset), onClick = {
+            onChange { it.copy(appCardOpacityPercent = 82) }
+        })
     }
 }
 
@@ -371,22 +407,11 @@ private fun Security(s: AppSettings, onChange: ((AppSettings) -> AppSettings) ->
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PinPad(entry: String, onDigit: (String) -> Unit, onClear: () -> Unit, onOk: () -> Unit, firstFocus: FocusRequester? = null) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("●".repeat(entry.length) + "○".repeat(4 - entry.length), style = MaterialTheme.typography.headlineMedium, color = LocalAccent.current)
-        for (row in listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("7", "8", "9"), listOf("⌫", "0", "✓"))) {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                row.forEach { k ->
-                    FocusButton(
-                        k,
-                        Modifier.width(76.dp).then(if (k == "1" && firstFocus != null) Modifier.focusRequester(firstFocus) else Modifier),
-                        onClick = { when (k) { "⌫" -> onClear(); "✓" -> onOk(); else -> onDigit(k) } },
-                    )
-                }
-            }
-        }
+        NumericKeypad(onDigit = onDigit, onClear = onClear, onConfirm = onOk, firstFocus = firstFocus)
     }
 }
 
@@ -394,6 +419,8 @@ fun PinPad(entry: String, onDigit: (String) -> Unit, onClear: () -> Unit, onOk: 
 private fun About() {
     val context = LocalContext.current
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Label(stringResource(R.string.publisher_label))
+        Text(stringResource(R.string.publisher_name), style = MaterialTheme.typography.titleLarge, color = LocalAccent.current)
         Note(stringResource(R.string.version, BuildConfigInfo.versionName(context)))
         Note("${Build.MANUFACTURER} ${Build.MODEL} · Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
         Note("${Build.DISPLAY} · ${Build.VERSION.SECURITY_PATCH}")

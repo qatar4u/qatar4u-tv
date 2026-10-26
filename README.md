@@ -1,5 +1,7 @@
 # Qatar4u TV
 
+**Publisher: Qatar4u**
+
 A home screen for the Samsung Galaxy Tab S6 (SM-T865) that turns it into a living-room entertainment hub:
 large gold-framed cards you can drive with a Bluetooth remote, prayer times calculated on the tablet,
 weather from Open-Meteo, Qatar landmark wallpapers and the streaming apps you already have. It runs on
@@ -18,7 +20,7 @@ stock Android 8 and later, with no root and no system changes.
   the tablet is offline it shows the last reading with its time, marked as offline. Refreshes about hourly
   in the background and on demand.
 - **Entertainment hub.** Lists only the apps that are actually installed and opens them with their own
-  launch intent. YouTube, Netflix, Shahid, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
+  launch intent. YouTube, TikTok, Netflix, OSN+, STARZPLAY, VLC, Kodi and Plex are recognised;
   missing ones open their Google Play page. Favourites, reordering and hiding. A local video library row.
 - **Qatar wallpapers** stored on the tablet: the owner's own photos of Qatar.
   Changes on a schedule you pick, or stays pinned. Add more pictures from the tablet.
@@ -57,10 +59,48 @@ then `tools\install-windows.ps1`.
 
 ## Privacy
 
-The only network request is the Open-Meteo forecast for your city's coordinates, over HTTPS. Location is
+Weather requests use Open-Meteo over HTTPS. The optional Download apps section contacts AFTVnews and the destination chosen by the owner, then uses Android DownloadManager to download an APK. No credentials or browser sessions are copied. Location is
 asked for only when you tap "Use my location" and stays on the tablet. No analytics, no accounts.
 
 ## Credits
 
 Weather data by [Open-Meteo.com](https://open-meteo.com/) (CC BY 4.0). Cairo font, SIL Open Font
 License (`licenses/Cairo-OFL.txt`). Wallpaper photos supplied by the owner, who holds the rights to them.
+
+## Downloader codes (1.5.2 candidate)
+
+Settings > Download apps accepts AFTVnews numeric Downloader codes (including Arabic digits) and direct HTTP/HTTPS APK URLs. Use the remote keypad or type/paste a link, show the destination, then explicitly download. Progress, cancellation/deletion and reopening the last download are supported across app restarts. Only one download is managed at a time; starting another removes the previous completed/failed file.
+
+Codes are URL shortcuts: host your APK first and generate a code at https://go.aftvnews.com/. This app does not upload files or generate AFTVnews codes. Pages requiring JavaScript, login or extra clicks open in an external browser; HTTP destinations are supported and labeled as unencrypted before download. Resolution depends on the public shortener page and may need updating if its format changes.
+
+Install APK validates the package archive and opens Android's installer. If prompted, allow installation from Qatar4u TV, return, and press Install APK again. Every install requires Android confirmation. Split APK bundles (APKS/XAPK), silent installation and automatic updating are not supported.
+
+Validation: unit tests cover input normalization, the manual redirect parser and rejection of unsupported schemes/credentials. Before publishing, test a known developer-hosted APK code on Android 10, including consent, denied permission, completion, cancellation, offline/reconnection and process recreation. No arbitrary third-party app was installed during development.
+
+### Downloader fixes in 1.5.2
+
+The keypad uses two fixed left-to-right rows of large digits, with separate delete/clear controls. APK classification also checks Content-Disposition and treats HTML as a webpage even when its URL ends in .apk. Resolver and DownloadManager share a User-Agent. HTTP links are supported (with an unencrypted-transfer label); the manifest permits cleartext transfers for this feature, while weather continues to use HTTPS. Errors distinguish invalid codes, missing files, blocked requests, redirects and connectivity; failed Android downloads show the platform reason code.
+
+Resolver regression tests exercise the complete code → manual link → relative HTTP redirect → APK response chain with deterministic transport fixtures. Live server/download checks are recorded in the PR; these are not a substitute for testing DownloadManager, installer permissions and the keypad on the tablet.
+
+### Keypad and TikTok (1.5.3 candidate)
+
+Downloader and PIN entry use the same large 64 dp keypad: fixed visual order 123 / 456 / 789 / Clear 0 Confirm, including in Arabic. Clear empties the entry; Confirm resolves a Downloader code or submits a PIN. PIN digits stay masked. TikTok is included in app recommendations, opening the installed app or its official Google Play listing.
+
+## Device testing
+
+Successfully tested on **HUAWEI Mate X6**, as reported by the project owner. This records the owner's device experience; it does not imply that every feature or other device has been verified.
+
+## Download version 1.5.3
+
+**Publisher: Qatar4u**
+
+[Download APK from GitHub](https://github.com/qatar4u/qatar4u-tv/raw/refs/heads/main/downloads/qatar4u-tv.apk) · [SHA256 checksum](downloads/SHA256SUMS)
+
+Download and open the APK on Android. Allow installation from the download source if requested, then confirm. Install over the previous version; the established signing key is retained. Do not remove existing app data to work around a signature mismatch.
+
+Changes: shared phone-style Downloader/PIN keypad (123 / 456 / 789 / Clear 0 Confirm), saved app-card background transparency, Downloader codes and APK links with progress, location freshness and download diagnostics, TikTok suggestions, and removal of Shahid from suggestions. This does not uninstall Shahid.
+
+Successfully tested on **HUAWEI Mate X6**, as reported by the owner; this is not an exhaustive feature certification.
+
+The direct link becomes available when the distribution job completes. GitHub Releases may still show 1.3.0 until the owner's RELEASE_TOKEN is configured.

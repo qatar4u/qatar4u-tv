@@ -36,6 +36,7 @@ data class AppSettings(
     /** File name of a pinned wallpaper, empty to rotate. */
     val pinnedWallpaper: String = "",
     val accent: Accent = Accent.GOLD,
+    val appCardOpacityPercent: Int = 82,
     val screensaverMinutes: Int = 10,
     val pinHash: String = "",
     /** Package order of the app hub; packages not listed follow in name order. */
@@ -67,6 +68,7 @@ class SettingsStore(private val context: Context) {
         val wallpaperMinutes = intPreferencesKey("wallpaper_minutes")
         val pinned = stringPreferencesKey("pinned_wallpaper")
         val accent = stringPreferencesKey("accent")
+        val appCardOpacity = intPreferencesKey("app_card_opacity_percent")
         val screensaver = intPreferencesKey("screensaver_minutes")
         val pin = stringPreferencesKey("pin_hash")
         val order = stringPreferencesKey("app_order")
@@ -102,6 +104,7 @@ class SettingsStore(private val context: Context) {
             p[K.wallpaperMinutes] = s.wallpaperMinutes
             p[K.pinned] = s.pinnedWallpaper
             p[K.accent] = s.accent.name
+            p[K.appCardOpacity] = s.appCardOpacityPercent.coerceIn(0, 100)
             p[K.screensaver] = s.screensaverMinutes
             p[K.pin] = s.pinHash
             p[K.order] = s.appOrder.joinToString(",")
@@ -130,6 +133,7 @@ class SettingsStore(private val context: Context) {
             wallpaperMinutes = p[K.wallpaperMinutes] ?: d.wallpaperMinutes,
             pinnedWallpaper = p[K.pinned] ?: d.pinnedWallpaper,
             accent = p[K.accent]?.let { runCatching { Accent.valueOf(it) }.getOrNull() } ?: d.accent,
+            appCardOpacityPercent = (p[K.appCardOpacity] ?: d.appCardOpacityPercent).coerceIn(0, 100),
             screensaverMinutes = p[K.screensaver] ?: d.screensaverMinutes,
             pinHash = p[K.pin] ?: d.pinHash,
             appOrder = p[K.order]?.split(",")?.filter { it.isNotBlank() } ?: d.appOrder,
@@ -163,6 +167,7 @@ class SettingsStore(private val context: Context) {
         put("prayerMethod", s.prayerMethod.name); put("offsets", s.offsets.joinToString(","))
         put("weatherEnabled", s.weatherEnabled); put("weatherMinutes", s.weatherMinutes)
         put("wallpaperMinutes", s.wallpaperMinutes); put("pinnedWallpaper", s.pinnedWallpaper)
+        put("appCardOpacityPercent", s.appCardOpacityPercent)
         put("accent", s.accent.name); put("screensaverMinutes", s.screensaverMinutes)
         put("appOrder", s.appOrder.joinToString(",")); put("favorites", s.favorites.joinToString(","))
         put("hidden", s.hidden.joinToString(","))
@@ -190,6 +195,7 @@ class SettingsStore(private val context: Context) {
             wallpaperMinutes = o.optInt("wallpaperMinutes", d.wallpaperMinutes).coerceIn(0, 1440),
             pinnedWallpaper = o.optString("pinnedWallpaper", ""),
             accent = runCatching { Accent.valueOf(o.optString("accent")) }.getOrDefault(d.accent),
+            appCardOpacityPercent = o.optInt("appCardOpacityPercent", d.appCardOpacityPercent).coerceIn(0, 100),
             screensaverMinutes = o.optInt("screensaverMinutes", d.screensaverMinutes).coerceIn(0, 120),
             pinHash = keepPin,
             appOrder = list("appOrder"),
